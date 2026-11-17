@@ -1,0 +1,10 @@
+﻿magocracy = {
+	texture = "gfx/interface/icons/government_types/magocracy_government.dds"
+	parent = government
+	alias = { magocracy_government magocracy_governments magocracies }
+}
+mages_commune = {
+	texture = "gfx/interface/icons/map_icons/map_icon_company.dds"
+	parent = domicile
+	alias = { mages_communes }
+}

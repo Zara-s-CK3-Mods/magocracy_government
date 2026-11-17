@@ -1,0 +1,237 @@
+﻿## The Conclave of Magisters
+#
+# Composition decides who sits in the Conclave, authority decides what it must approve,
+# and the threshold decides how many votes a proposal needs.
+# The head's term of office uses the vanilla republic term length laws (see zz_magocracy_succession_laws.txt).
+#
+@conclave_law_prestige_cost = 500
+
+### Composition
+
+# The head of the Magocracy and every landed adult magister among their vassals
+magocracy_conclave_composition_magisters = {
+	law_group_type = republic_assembly_composition_laws
+	index = 12
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	should_start_with = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+	on_after_pass = { update_assembly = yes }
+
+	assembly = {
+		major = {
+			sources = { vassals liege }
+			limit = {
+				OR = {
+					magocracy_is_conclave_head_trigger = yes
+					AND = {
+						has_trait = zz_magister
+						is_adult = yes
+					}
+				}
+			}
+		}
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 10 }
+}
+
+# The head of the Magocracy and the heads of its noble families
+magocracy_conclave_composition_houses = {
+	law_group_type = republic_assembly_composition_laws
+	index = 13
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+	on_after_pass = { update_assembly = yes }
+
+	assembly = {
+		major = {
+			sources = { vassals liege }
+			limit = {
+				OR = {
+					magocracy_is_conclave_head_trigger = yes
+					AND = {
+						any_held_title = { is_noble_family_title = yes }
+						is_adult = yes
+					}
+				}
+			}
+		}
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 5 }
+}
+
+# A High Conclave of great magisters, with lesser magisters and court magisters as minor members
+magocracy_conclave_composition_high = {
+	law_group_type = republic_assembly_composition_laws
+	index = 14
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = {
+		magocracy_conclave_realm_trigger = yes
+		highest_held_title_tier >= tier_kingdom
+	}
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+	on_after_pass = { update_assembly = yes }
+
+	assembly = {
+		major = {
+			sources = { vassals liege }
+			limit = {
+				OR = {
+					magocracy_is_conclave_head_trigger = yes
+					AND = {
+						has_trait = zz_magister
+						highest_held_title_tier >= tier_duchy
+						is_adult = yes
+					}
+				}
+			}
+		}
+		minor = {
+			sources = { vassals courtiers }
+			limit = {
+				has_trait = zz_magister
+				is_adult = yes
+				NOT = { highest_held_title_tier >= tier_duchy }
+			}
+		}
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 5 }
+}
+
+# Every adult mage in the realm sits in the Conclave with a full vote: the head, magister vassals,
+# magisters at the head's court and magister barons
+magocracy_conclave_composition_all_mages = {
+	law_group_type = republic_assembly_composition_laws
+	index = 15
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+	on_after_pass = { update_assembly = yes }
+
+	assembly = {
+		major = {
+			sources = { liege vassals courtiers baronies }
+			limit = {
+				OR = {
+					magocracy_is_conclave_head_trigger = yes
+					AND = {
+						has_trait = zz_magister
+						is_adult = yes
+					}
+				}
+			}
+		}
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 5 }
+}
+
+### Authority
+
+# The Conclave votes on every change to the realm's laws
+magocracy_conclave_authority_constitutional = {
+	law_group_type = republic_assembly_authority_laws
+	index = 11
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	voting_session = { always = yes }
+	ai_will_do = { value = 5 }
+}
+
+# The Conclave must approve changes to the realm's laws
+magocracy_conclave_authority_legislative = {
+	law_group_type = republic_assembly_authority_laws
+	index = 12
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	should_start_with = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 10 }
+}
+
+# The Conclave advises, but the head of the Magocracy rules
+magocracy_conclave_authority_ceremonial = {
+	law_group_type = republic_assembly_authority_laws
+	index = 13
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 1 }
+}
+
+### Voting thresholds
+
+magocracy_conclave_voting_thresholds_simple_majority = {
+	law_group_type = republic_assembly_voting_thresholds
+	index = 11
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	should_start_with = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+
+	assembly_voting_thresholds = {
+		law_votes = { value = 0.51 }
+		decree_votes = { value = 0.51 }
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 10 }
+}
+
+magocracy_conclave_voting_thresholds_supermajority = {
+	law_group_type = republic_assembly_voting_thresholds
+	index = 12
+
+	can_keep = { magocracy_conclave_realm_trigger = yes }
+	can_have = { magocracy_conclave_realm_trigger = yes }
+	can_pass = { magocracy_conclave_can_pass_law_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	pass_cost = { prestige = @conclave_law_prestige_cost }
+
+	assembly_voting_thresholds = {
+		law_votes = { value = 0.67 }
+		decree_votes = { value = 0.67 }
+	}
+
+	requires_approve = { magocracy_conclave_requires_approval_trigger = yes }
+	ai_will_do = { value = 5 }
+}

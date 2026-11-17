@@ -1,0 +1,385 @@
+﻿# Mage's Commune versions of the admin estate decisions (ep3_decisions.txt)
+
+
+mages_commune_establish_silk_production_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_estate.dds"
+	}
+	sort_order = 120
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { top_liege = this }
+				desc = establish_silk_production_decision_desc.emperor
+			}
+			desc = establish_silk_production_decision_desc
+		}
+	}
+	selection_tooltip = establish_silk_production_decision_tooltip
+	decision_group_type = admin
+
+	is_shown = {
+		government_has_mechanic = administrative
+		domicile ?= {
+			domicile_is_mages_commune_trigger = yes
+		}
+		has_ep3_dlc_trigger = yes
+		OR = {
+			this = house.house_head
+			AND = {
+				is_ai = no
+				house.house_head ?= top_liege
+			}
+		}
+		NOT = {
+			house = {
+				has_house_modifier = ep3_unlocked_silk
+			}
+		}
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { top_liege = this }
+			OR = {
+				is_roman_emperor_trigger = yes
+				has_trait = zz_magister
+			}
+			
+			OR = {
+				has_realm_law = imperial_bureaucracy_2
+				has_realm_law = imperial_bureaucracy_3
+			}
+		}
+		trigger_else = {
+			influence_level >= 3
+			OR = {
+				has_weak_hook = top_liege
+				has_strong_usable_hook = top_liege
+				AND = {
+					exists = house
+					top_liege.house ?= house
+				}
+			}
+		}
+	}
+
+	cost = {
+		gold = {
+			value = {
+				value = massive_gold_value
+				multiply = 2
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = unlocked_estate_silk_buildings
+			house = { add_house_modifier = ep3_unlocked_silk }
+		}
+		send_interface_toast = {
+			type = msg_domicile_building_unlocked
+			title = ep3_unlocked_silk
+			desc = unlocked_estate_silk_buildings_t
+		}
+		if = {
+			limit = {
+				top_liege != this
+				NOT = {
+					exists = house
+					top_liege.house ?= house
+				}
+			}
+			use_hook = top_liege
+		}
+	}
+
+	ai_potential = {
+		domicile ?= {
+			domicile_is_mages_commune_trigger = yes
+		}
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 120
+		kingdom = 120
+		empire = 120
+		hegemony = 120
+	}
+
+	ai_will_do = {
+		base = 50
+		modifier = {
+			has_trait = arrogant
+			add = 15
+		}
+		modifier = {
+			has_trait = ambitious
+			add = 25
+		}
+	}
+}
+
+mages_commune_foster_integration_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_legitimacy.dds"
+	}
+	cooldown = { years = 20 }
+	sort_order = 120
+
+	desc = foster_integration_decision_desc
+	selection_tooltip = foster_integration_decision_tooltip
+	decision_group_type = admin
+
+	is_shown = {
+		government_has_mechanic = administrative
+		domicile ?= {
+			domicile_is_mages_commune_trigger = yes
+		}
+		root.top_liege != root
+		OR = {
+			top_liege.primary_title ?= {
+				NOT = { is_de_jure_liege_or_above_target = root.domicile.domicile_location.county }
+			}
+			domicile.domicile_location.county.culture != root.top_liege.culture
+		}
+		has_dlc_feature = roads_to_power
+		is_adult = yes
+		this = house.house_head
+		exists = top_liege
+	}
+
+	is_valid = {
+		OR = {
+			domicile.domicile_location.county = { de_jure_drifting_towards = root.top_liege.primary_title }
+			domicile.domicile_location.county.culture = {
+				cultural_acceptance = {
+					target = root.top_liege.culture
+					value <= 75
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available = yes
+	}
+
+	cost = {
+		influence = {
+			value = {
+				add = major_influence_value
+				multiply = 2
+			}
+		}
+	}
+
+	effect = {
+		domicile.domicile_location.county = { save_scope_as = target_county }
+		add_character_modifier = {
+			modifier = ep3_integration_promoter_modifier
+			years = 15
+		}
+		set_variable = {
+			name = integration_promoted_in
+			value = scope:target_county
+			years = 15
+		}
+		if = {
+			limit = {
+				scope:target_county = { de_jure_drifting_towards = root.top_liege.primary_title }
+			}
+			scope:target_county = {
+				add_county_modifier = {
+					modifier = improve_de_jure_integration_modifier
+					years = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:target_county.culture != root.top_liege.culture
+				scope:target_county.culture = {
+					cultural_acceptance = {
+						target = root.top_liege.culture
+						value <= 75
+					}
+				}
+			}
+			scope:target_county = {
+				add_county_modifier = {
+					modifier = improve_promote_culture_modifier
+					years = 10
+				}
+			}
+		}
+		if = {
+			limit = {
+				top_liege = {
+					is_ai = yes
+					this != root
+				}
+			}
+			top_liege = {
+				add_opinion = {
+					target = root
+					modifier = grateful_opinion
+					opinion = 25
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					scope:target_county = { has_county_modifier = improve_promote_culture_modifier }
+				}
+				top_liege = {
+					send_interface_message = {
+						type = msg_vassal_decision_good
+						title = improve_promote_culture_modifier
+						desc = improve_promote_culture_modifier_tt
+						left_icon = root
+						right_icon = scope:target_county
+					}
+				}
+			}
+			else = {
+				top_liege = {
+					send_interface_message = {
+						type = msg_vassal_decision_good
+						title = improve_de_jure_integration_modifier
+						desc = improve_de_jure_integration_modifier_tt
+						left_icon = root
+						right_icon = scope:target_county
+					}
+				}
+			}
+		}
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 36
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 0
+	}
+
+	ai_potential = {
+		government_has_mechanic = administrative
+		exists = top_liege
+		root.top_liege != root
+	}
+
+	ai_will_do = {
+		base = 75
+		modifier = {
+			culture = top_liege.culture
+			add = 25
+		}
+		modifier = {
+			has_trait = loyal
+			add = 20
+		}
+		modifier = {
+			has_trait = disloyal
+			add = -20
+		}
+	}
+}
+
+mages_commune_gather_faction_support_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_recruitment.dds"
+	}
+	cooldown = { years = 25 }
+	sort_order = 120
+
+	desc = gather_faction_support_decision_desc
+	selection_tooltip = gather_faction_support_decision_tooltip
+	decision_group_type = admin
+
+	is_shown = {
+		has_dlc_feature = roads_to_power
+		government_has_mechanic = administrative
+		exists = top_liege
+		top_liege != root
+		is_adult = yes
+		this = house.house_head
+		domicile ?= {
+			domicile_is_mages_commune_trigger = yes
+		}
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = belong_to_claimant_liberty_faction_tt
+			joined_faction ?= {
+				OR = {
+					faction_is_type = claimant_faction
+					faction_is_type = liberty_faction
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_at_peace = yes
+	}
+
+	cost = {
+		influence = {
+			value = {
+				add = massive_influence_value
+				multiply = 2
+			}
+		}
+	}
+
+	effect = {
+		joined_faction = { save_scope_as = the_faction }
+		add_joined_faction_discontent = 20
+		custom_tooltip = gathered_support_for_faction_get_army_tt
+		set_variable = {
+			name = gathered_support_for_faction
+			value = scope:the_faction
+			years = 5
+		}
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 60
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 0
+	}
+
+	ai_potential = {
+		government_has_mechanic = administrative
+		exists = top_liege
+		top_liege != root
+	}
+
+	ai_will_do = {
+		base = 50
+		modifier = {
+			has_trait = loyal
+			add = -30
+		}
+		modifier = {
+			has_trait = disloyal
+			add = 30
+		}
+		modifier = {
+			has_trait = ambitious
+			add = 50
+		}
+	}
+}

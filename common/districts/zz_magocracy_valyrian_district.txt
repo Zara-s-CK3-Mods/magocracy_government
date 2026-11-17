@@ -1,0 +1,42 @@
+﻿# Valyrian District: a Magocracy regular district, founded and raised only by the Construct Valyrian Spires project
+magocracy_valyrian_district = {
+	primary_building = magocracy_valyrian_spires_01
+
+	background = {
+		reference = "gfx/interface/illustrations/zz_valyria_projects/zz_valyria_tower.dds"
+	}
+
+	is_enabled = {
+		scope:holder = {
+			government_has_flag = government_is_magocracy
+		}
+	}
+
+	# Takes a regular slot, but only the Spires project may found it
+	type = regular
+	can_be_replaced = no
+
+	can_construct_potential = {
+		always = no
+	}
+
+	buildings = {
+		magocracy_valyrian_roads_01
+		magocracy_valyrian_walls_01
+		zz_mages_tower_tower_01
+		magocracy_valyrian_city_hall_01
+		magocracy_valyrian_loggia_01
+		magocracy_valyrian_statute_hall_01
+		magocracy_valyrian_council_chamber_01
+		magocracy_valyrian_debt_office_01
+		magocracy_valyrian_civic_hospital_01
+		magocracy_valyrian_weigh_house_01
+		magocracy_valyrian_clock_tower_01
+		magocracy_valyrian_civic_ward_01
+		magocracy_valyrian_league_chapter_house_01
+		magocracy_valyrian_podesta_residence_01
+		magocracy_valyrian_fountain_01
+		magocracy_valyrian_basilica_01
+		magocracy_valyrian_patron_saint_sanctuary_1
+	}
+}

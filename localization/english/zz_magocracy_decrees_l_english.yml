@@ -1,0 +1,105 @@
+﻿l_english:
+ # Shared
+ magocracy_decree_not_enough_mana_tt: "The realm's magisters together hold enough [drops_of_power|E] (#V [GetPlayer.MakeScope.ScriptValue('magocracy_realm_mana_pool_value')|0]#! held)"
+ magocracy_decree_spend_mana_tt: "Draws the decree's [drops_of_power|E] from every magister in the realm, each giving in proportion to what they hold. Those who did not pledge support for the decree resent it"
+ magocracy_decree_head_is_mage_tt: "You are a magister"
+ magocracy_decree_mage_voter_desc: "Is a magister"
+ magocracy_every_realm_mage: "Every magister in your realm"
+ magocracy_every_realm_blood_mage: "Every magister in your realm who practises [blood_magic|E]"
+ magocracy_every_realm_county: "Every [county|E] in your realm"
+ magocracy_blood_rites_proscribed_tt: "[blood_magic|E] is proscribed in your realm, and no longer sanctioned"
+ magocracy_blood_rites_sanctioned_tt: "[blood_magic|E] is sanctioned in your realm, and no longer proscribed"
+ magocracy_blood_rites_already_proscribed_tt: "[blood_magic|E] is not already proscribed in your realm"
+ magocracy_blood_rites_already_sanctioned_tt: "[blood_magic|E] is not already sanctioned in your realm"
+
+ # 1. Mandate Arcane Study
+ magocracy_arcane_study_decree_decision: "Mandate Arcane Study"
+ magocracy_arcane_study_decree_decision_desc: "The Conclave will pay for every magister of the realm to return to their studies, with tutors, texts and time set aside for the higher mysteries."
+ magocracy_arcane_study_decree_decision_tooltip: "Every magister in the realm learns faster for ten years"
+ magocracy_arcane_study_decree_decision_confirm: "Mandate the study"
+
+ # 2. Mana Tithe
+ magocracy_mana_tithe_decree_decision: "Levy the Mana Tithe"
+ magocracy_mana_tithe_decree_decision_desc: "By ancient right, the head of the Conclave may call upon every magister of the realm to surrender a share of their power. Few give it gladly."
+ magocracy_mana_tithe_decree_decision_tooltip: "Take a quarter of the [drops_of_power|E] held by every other magister in the realm"
+ magocracy_mana_tithe_decree_decision_confirm: "Levy the tithe"
+ magocracy_mana_tithe_decree_decision_effect_tt: "Every other magister in the realm gives you a quarter of their [drops_of_power|E], and resents it"
+
+ # 3. Ward the Capital
+ magocracy_ward_capital_decree_decision: "Ward the Capital"
+ magocracy_ward_capital_decree_decision_desc: "The Conclave's magisters will raise wards over the capital, binding its walls against siege and its streets against plague.\n\nCosts #V [GetPlayer.MakeScope.ScriptValue('magocracy_ward_capital_decree_mana_cost')|0]#! [drops_of_power|E], drawn from the realm's magisters."
+ magocracy_ward_capital_decree_decision_tooltip: "Strengthen your capital's defences and guard it against [epidemics|E] for ten years"
+ magocracy_ward_capital_decree_decision_confirm: "Raise the wards"
+
+ # 4. Rite of Plenty
+ magocracy_rite_of_plenty_decree_decision: "Perform the Rite of Plenty"
+ magocracy_rite_of_plenty_decree_decision_desc: "Every magister of the realm will join in a single great working, sending its blessing across every field and city the Conclave rules.\n\nCosts #V [GetPlayer.MakeScope.ScriptValue('magocracy_rite_of_plenty_decree_mana_cost')|0]#! [drops_of_power|E], drawn from the realm's magisters."
+ magocracy_rite_of_plenty_decree_decision_tooltip: "Every [county|E] in your realm prospers and grows fonder of you for ten years"
+ magocracy_rite_of_plenty_decree_decision_confirm: "Perform the rite"
+
+ # 5. Muster the War-Mages
+ magocracy_muster_war_mages_decree_decision: "Muster the War-Mages"
+ magocracy_muster_war_mages_decree_decision_desc: "The Conclave will send its magisters to march with the armies of the realm, to turn blades, break lines and spare the coffers.\n\nCosts #V [GetPlayer.MakeScope.ScriptValue('magocracy_muster_war_mages_decree_mana_cost')|0]#! [drops_of_power|E], drawn from the realm's magisters."
+ magocracy_muster_war_mages_decree_decision_tooltip: "Your armies fight harder and cost less for five years. May be passed in war"
+ magocracy_muster_war_mages_decree_decision_confirm: "Muster the war-mages"
+
+ # 6. Proscribe the Forbidden Arts
+ magocracy_proscribe_blood_rites_decree_decision: "Proscribe the Forbidden Arts"
+ magocracy_proscribe_blood_rites_decree_decision_desc: "The Conclave will declare [blood_magic|E] an abomination, forbidden to every magister of the realm. The pious will rejoice; those who walk the red path will not."
+ magocracy_proscribe_blood_rites_decree_decision_tooltip: "Ban [blood_magic|E] in your realm, gaining [piety|E] and angering the realm's blood mages"
+ magocracy_proscribe_blood_rites_decree_decision_confirm: "Proscribe the Forbidden Arts"
+
+ # 7. Sanction the Blood Rites
+ magocracy_sanction_blood_rites_decree_decision: "Sanction the Blood Rites"
+ magocracy_sanction_blood_rites_decree_decision_desc: "The Conclave will declare [blood_magic|E] a lawful art, to be studied openly by any magister of the realm. The faithful will be appalled, and the realm will learn to fear you."
+ magocracy_sanction_blood_rites_decree_decision_tooltip: "Permit [blood_magic|E] in your realm, gaining [dread|E] and the gratitude of the realm's blood mages"
+ magocracy_sanction_blood_rites_decree_decision_confirm: "Sanction the rites"
+
+ # 8. Search for the Gifted
+ magocracy_search_gifted_decree_decision: "Search for the Gifted"
+ magocracy_search_gifted_decree_decision_desc: "The Conclave will send its seekers across the realm to find those born with the spark of the higher mysteries, and bring them to court to be taught."
+ magocracy_search_gifted_decree_decision_tooltip: "Bring one to three young magisters to your court"
+ magocracy_search_gifted_decree_decision_confirm: "Begin the search"
+ magocracy_search_gifted_decree_decision_effect_tt: "One to three young magisters join your court"
+
+ # 9. State Forge Grant
+ magocracy_state_forge_grant_decree_decision: "Grant from the State Forges"
+ magocracy_state_forge_grant_decree_decision_desc: "The Conclave will commission the state forges to work a single ingot of Valyrian steel for the head of the realm, at great expense to the treasury."
+ magocracy_state_forge_grant_decree_decision_tooltip: "Receive a Valyrian Steel Ingot"
+ magocracy_state_forge_grant_decree_decision_confirm: "Draw on the forges"
+
+ # 10. Open the Arcane Archives
+ magocracy_arcane_archives_decree_decision: "Open the Arcane Archives"
+ magocracy_arcane_archives_decree_decision_desc: "The sealed archives of the Conclave will be opened to its magisters, and scholars invited to the capital to study them."
+ magocracy_arcane_archives_decree_decision_tooltip: "Gain [learning|E] and learn faster for ten years, your capital prospers, and every magister in the realm gains [higher_mysteries|E] experience"
+ magocracy_arcane_archives_decree_decision_confirm: "Open the archives"
+
+ # Modifiers
+ magocracy_arcane_study_modifier: "Mandated Arcane Study"
+ magocracy_arcane_study_modifier_desc: "The Conclave pays for this magister's studies."
+ magocracy_ward_capital_modifier: "Conclave Wards"
+ magocracy_ward_capital_modifier_desc: "The Conclave's wards bind these walls against siege."
+ magocracy_ward_capital_county_modifier: "Conclave Wards"
+ magocracy_ward_capital_county_modifier_desc: "The Conclave's wards guard these streets against plague."
+ magocracy_rite_of_plenty_modifier: "Rite of Plenty"
+ magocracy_rite_of_plenty_modifier_desc: "The blessing of the Conclave's great working lies upon this land."
+ magocracy_war_mages_modifier: "War-Mages Mustered"
+ magocracy_war_mages_modifier_desc: "The Conclave's magisters march with this ruler's armies."
+ magocracy_proscriber_modifier: "Proscriber of the Forbidden Arts"
+ magocracy_proscriber_modifier_desc: "This ruler has banned blood magic in their realm."
+ magocracy_blood_arts_proscribed_modifier: "Forbidden Arts Proscribed"
+ magocracy_blood_arts_proscribed_modifier_desc: "Blood magic is banned in this magister's realm, and must be studied in secret."
+ magocracy_sanctioner_modifier: "Sanctioner of the Blood Rites"
+ magocracy_sanctioner_modifier_desc: "This ruler has made blood magic lawful in their realm."
+ magocracy_blood_arts_sanctioned_modifier: "Blood Rites Sanctioned"
+ magocracy_blood_arts_sanctioned_modifier_desc: "Blood magic is lawful in this magister's realm, and may be studied openly."
+ magocracy_arcane_archives_modifier: "Arcane Archives Opened"
+ magocracy_arcane_archives_modifier_desc: "This ruler has opened the Conclave's sealed archives."
+ magocracy_arcane_archives_county_modifier: "Arcane Archives Opened"
+ magocracy_arcane_archives_county_modifier_desc: "Scholars flock to study in the Conclave's archives."
+
+ # Opinions
+ magocracy_mana_drawn_opinion: "Drew on my Power"
+ magocracy_mana_tithe_opinion: "Levied the Mana Tithe"
+ magocracy_blood_proscribed_opinion: "Proscribed the Blood Rites"
+ magocracy_blood_sanctioned_opinion: "Sanctioned the Blood Rites"

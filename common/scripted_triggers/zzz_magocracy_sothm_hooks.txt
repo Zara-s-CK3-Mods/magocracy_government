@@ -1,0 +1,5 @@
+﻿# Overrides the Secrets of Ambrosius hook (zz_valyria_magocracy_hook.txt, always = no there).
+# File name sorts after SOTHM's so this definition wins. Character scope.
+zz_sothm_magocracy_trigger = {
+	government_has_flag = government_is_magocracy
+}

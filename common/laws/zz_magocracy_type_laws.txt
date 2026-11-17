@@ -1,0 +1,192 @@
+﻿## Magocracy types
+#
+# After the Freehold Administration types: Dragonlord -> Warmage, Magocracy -> Arcane, Merchantlord -> Merchant-Mage.
+#
+@magocracy_type_prestige_cost = 2000
+@magocracy_type_treasury_cost = 1000
+@magocracy_type_realm_size_prestige_cost = @[magocracy_type_prestige_cost * 0.01]
+@magocracy_type_realm_size_treasury_cost = @[magocracy_type_treasury_cost * 0.01]
+
+# A realm held by battle-magisters
+magocracy_type_warmage = {
+	law_group_type = republic_type
+	index = 12
+	pass_phrase = magocracy_type_pass_phrase
+	confirmation_title = magocracy_type_pass_phrase
+	confirmation_button_text = magocracy_type_confirmation_button_text
+
+	modifier = {
+		heavy_cavalry_toughness_add = 20
+		heavy_infantry_toughness_add = 35
+		men_at_arms_title_cap = 2
+		men_at_arms_cap = 2
+	}
+
+	flag = can_change_succession_laws
+
+	can_keep = { government_has_flag = government_is_magocracy }
+	can_pass = { magocracy_is_conclave_head_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	can_have = { government_has_flag = government_is_magocracy }
+	pass_cost = {
+		prestige = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_prestige_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_prestige_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+		treasury = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_treasury_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_treasury_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+	}
+	on_pass = {
+		remove_law_related_modifiers_effect = yes
+		primary_title ?= { set_variable = magocracy_type_changed }
+	}
+	requires_approve = { always = no }
+	ai_will_do = { value = 5 }
+}
+
+# A realm upheld by the Higher Mysteries themselves
+magocracy_type_arcane = {
+	law_group_type = republic_type
+	index = 13
+	pass_phrase = magocracy_type_pass_phrase
+	confirmation_title = magocracy_type_pass_phrase
+	confirmation_button_text = magocracy_type_confirmation_button_text
+
+	modifier = {
+		zz_drops_of_power_advantage = 250
+		zz_drops_of_power_holding_construction_piety_cost = 0.2
+	}
+
+	flag = can_change_succession_laws
+
+	can_keep = { government_has_flag = government_is_magocracy }
+	can_pass = { magocracy_is_conclave_head_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	can_have = { government_has_flag = government_is_magocracy }
+	should_start_with = { government_has_flag = government_is_magocracy }
+	pass_cost = {
+		prestige = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_prestige_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_prestige_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+		treasury = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_treasury_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_treasury_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+	}
+	on_pass = {
+		remove_law_related_modifiers_effect = yes
+		primary_title ?= { set_variable = magocracy_type_changed }
+	}
+	requires_approve = { always = no }
+	ai_will_do = { value = 10 }
+}
+
+# A realm of merchant-magisters, rich in coin and renown
+magocracy_type_merchant = {
+	law_group_type = republic_type
+	index = 14
+	pass_phrase = magocracy_type_pass_phrase
+	confirmation_title = magocracy_type_pass_phrase
+	confirmation_button_text = magocracy_type_confirmation_button_text
+
+	modifier = {
+		monthly_prestige_gain_mult = 0.15
+		knight_limit = 2
+		feudal_government_tax_contribution_mult = 0.25
+		clan_government_tax_contribution_mult = 0.25
+		republic_government_tax_contribution_mult = 0.25
+		domicile_monthly_gold_add = 0.25
+	}
+
+	flag = can_change_succession_laws
+
+	can_keep = { government_has_flag = government_is_magocracy }
+	can_pass = { magocracy_is_conclave_head_trigger = yes }
+	potential = { government_has_flag = government_is_magocracy }
+	can_have = { government_has_flag = government_is_magocracy }
+	pass_cost = {
+		prestige = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_prestige_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_prestige_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+		treasury = {
+			# The first change of Magocracy type is free
+			if = {
+				limit = { primary_title ?= { has_variable = magocracy_type_changed } }
+					add = { value = @magocracy_type_treasury_cost desc = BASE }
+					if = {
+						limit = { sub_realm_size > 1 }
+						add = { value = @magocracy_type_realm_size_treasury_cost multiply = sub_realm_size desc = realm_size }
+					}
+		
+			}
+			else = {
+				add = { value = 0 desc = magocracy_type_first_change_free }
+			}
+		}
+	}
+	on_pass = {
+		remove_law_related_modifiers_effect = yes
+		primary_title ?= { set_variable = magocracy_type_changed }
+	}
+	requires_approve = { always = no }
+	ai_will_do = { value = 5 }
+}

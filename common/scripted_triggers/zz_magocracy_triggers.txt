@@ -1,0 +1,110 @@
+﻿# Magocracy / Mage's Commune triggers
+
+# Domicile scope
+domicile_is_mages_commune_trigger = {
+	is_domicile_type = mages_commune
+}
+
+# Character scope: may raid estates - holds an estate or a Mage's Commune
+raid_estate_raider_domicile_trigger = {
+	domicile ?= {
+		OR = {
+			domicile_is_estate_trigger = yes
+			domicile_is_mages_commune_trigger = yes
+		}
+	}
+}
+
+# Character scope (the raid target): an estate as in vanilla, or - only when $RAIDER$ holds a Mage's Commune -
+# a Mage's Commune or a merchant company
+raid_estate_target_domicile_trigger = {
+	OR = {
+		domicile ?= { domicile_is_estate_trigger = yes }
+		AND = {
+			$RAIDER$ = {
+				domicile ?= { domicile_is_mages_commune_trigger = yes }
+			}
+			domicile ?= {
+				OR = {
+					domicile_is_mages_commune_trigger = yes
+					is_domicile_type = merchant_company
+				}
+			}
+		}
+	}
+}
+
+# Commune version of ep3_raid_insight_trigger
+mages_commune_raid_insight_trigger = {
+	scope:owner = {
+		NOT = { has_character_modifier = raid_insight_$TYPE$ }
+	}
+	scope:target_domicile = { has_domicile_building_or_higher = mages_commune_$TYPE$_01 }
+}
+
+## The Conclave of Magisters (the Magocracy's assembly)
+
+# Realm rulers who hold the Conclave's laws
+magocracy_conclave_realm_trigger = {
+	government_has_flag = government_is_magocracy
+	is_landed = yes
+}
+
+# The head of the Magocracy: an independent magocrat, or one whose liege is not a magocrat
+magocracy_is_conclave_head_trigger = {
+	government_has_flag = government_is_magocracy
+	OR = {
+		is_independent_ruler = yes
+		liege ?= {
+			NOT = { government_has_flag = government_is_magocracy }
+		}
+	}
+}
+
+# Constitutional and legislative Conclaves must approve law changes
+magocracy_conclave_requires_approval_trigger = {
+	OR = {
+		has_realm_law = magocracy_conclave_authority_constitutional
+		has_realm_law = magocracy_conclave_authority_legislative
+		has_realm_law = republic_assembly_authority_constitutional
+		has_realm_law = republic_assembly_authority_legislative
+	}
+}
+
+# Only the head of the Magocracy may change how the Conclave works
+magocracy_conclave_can_pass_law_trigger = {
+	magocracy_is_conclave_head_trigger = yes
+}
+
+# The head may always propose Conclave changes; major members may too unless the Conclave is ceremonial
+magocracy_conclave_can_propose_trigger = {
+	OR = {
+		magocracy_is_conclave_head_trigger = yes
+		trigger_if = {
+			limit = {
+				liege ?= {
+					NOR = {
+						has_realm_law = magocracy_conclave_authority_ceremonial
+						has_realm_law = republic_assembly_authority_ceremonial
+					}
+				}
+			}
+			is_major_assembly_member = yes
+		}
+	}
+}
+
+
+# Used by external buildings to check main building level
+mages_commune_merchant_company_external_unlocked_by_main_building_trigger = {
+	domicile ?= { has_domicile_building_or_higher = mages_commune_merchant_company_main_$TIER$ }
+}
+
+# Main residence tier 4 / 5
+mages_commune_merchant_company_external_unlocked_by_main_tier_04_trigger = {
+	domicile ?= { has_domicile_building_or_higher = mages_commune_merchant_company_main_04 }
+}
+
+mages_commune_merchant_company_external_unlocked_by_main_tier_05_trigger = {
+	domicile ?= { has_domicile_building_or_higher = mages_commune_merchant_company_main_05 }
+}

@@ -1,0 +1,41 @@
+﻿# Mage's Commune versions of estate events (events/zz_mages_commune_events_2.txt), same lists and weights as vanilla
+grand_ambitions_powerful_family_coup_on_action = {
+	random_events = {
+		100 = mages_commune_events_2.1 # grand_ambitions.0120
+	}
+}
+
+ep3_yearly_events_admin = {
+	random_events = {
+		250 = mages_commune_events_2.2 # ep3_powerful_families.8040
+		250 = mages_commune_events_2.3 # ep3_powerful_families.8060
+		250 = mages_commune_events_2.4 # ep3_powerful_families.8070
+		250 = mages_commune_events_2.5 # ep3_landless_admin.1010
+		250 = mages_commune_events_2.6 # ep3_landless_admin.1020
+		200 = mages_commune_events_2.8 # ep3_emperor_yearly.2190
+		250 = mages_commune_events_2.9 # ep3_governor_yearly.8020
+		250 = mages_commune_events_2.10 # ep3_governor_yearly.8030
+		250 = mages_commune_events_2.11 # ep3_governor_yearly.8040
+	}
+}
+
+on_yearly_events = {
+	random_events = {
+		250 = mages_commune_events_2.2 # ep3_powerful_families.8040
+		250 = mages_commune_events_2.3 # ep3_powerful_families.8060
+		250 = mages_commune_events_2.4 # ep3_powerful_families.8070
+		250 = mages_commune_events_2.5 # ep3_landless_admin.1010
+		250 = mages_commune_events_2.6 # ep3_landless_admin.1020
+		200 = mages_commune_events_2.8 # ep3_emperor_yearly.2190
+		250 = mages_commune_events_2.9 # ep3_governor_yearly.8020
+		250 = mages_commune_events_2.10 # ep3_governor_yearly.8030
+		250 = mages_commune_events_2.11 # ep3_governor_yearly.8040
+	}
+}
+
+travel_events_on_action = {
+	random_events = {
+		400 = mages_commune_events_2.7 # ep3_emperor_yearly.2180
+	}
+}
+

@@ -1,0 +1,35 @@
+﻿# Magocracy decrees: values
+
+# Mana held by every magister in the realm: the head, their courtiers and every vassal below them
+magocracy_realm_mana_pool_value = {
+	value = 0
+	if = {
+		limit = { has_trait = zz_magister }
+		add = zz_valyria_drops_of_power_stat
+	}
+	every_courtier = {
+		limit = { has_trait = zz_magister }
+		add = zz_valyria_drops_of_power_stat
+	}
+	every_vassal_or_below = {
+		limit = { has_trait = zz_magister }
+		add = zz_valyria_drops_of_power_stat
+	}
+}
+
+# Mana costs
+magocracy_ward_capital_decree_mana_cost = 100
+magocracy_muster_war_mages_decree_mana_cost = 150
+magocracy_rite_of_plenty_decree_mana_cost = 300
+
+# A quarter of each magister's mana goes to the head under the Mana Tithe
+magocracy_mana_tithe_share_value = {
+	value = zz_valyria_drops_of_power_stat
+	multiply = 0.25
+	floor = yes
+}
+
+magocracy_state_forge_grant_gold_cost = {
+	value = total_republic_decree_gold_cost
+	multiply = 3
+}

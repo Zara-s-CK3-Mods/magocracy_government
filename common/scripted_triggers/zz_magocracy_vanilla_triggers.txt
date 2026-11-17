@@ -1,0 +1,23 @@
+﻿## Vanilla republic triggers, extended so the Magocracy's Conclave authority laws count
+# (common/scripted_triggers/gdp_republic_triggers.txt; loads after it, so these definitions win)
+
+gdp_requires_assembly_approval_trigger = {
+	# If you have Constitutional or Legislative Assembly Authority
+	OR = {
+		has_realm_law = republic_assembly_authority_constitutional
+		has_realm_law = republic_assembly_authority_legislative
+		# Magocracy: the Conclave of Magisters
+		has_realm_law = magocracy_conclave_authority_constitutional
+		has_realm_law = magocracy_conclave_authority_legislative
+	}
+}
+
+gdp_assembly_approval_for_decrees_trigger = {
+	highest_liege_matching_rule:uses_assembly = {
+		OR = {
+			has_realm_law = republic_assembly_authority_constitutional
+			# Magocracy: a constitutional Conclave of Magisters approves decrees
+			has_realm_law = magocracy_conclave_authority_constitutional
+		}
+	}
+}

@@ -1,0 +1,13 @@
+﻿# Valyrian District building income (copied from the Freehold mod)
+@magocracy_valyrian_tax_base = 2
+@magocracy_valyrian_tax_step = 0.5
+magocracy_valyrian_building_tax_tier_1 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 0]
+magocracy_valyrian_building_tax_tier_2 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 1]
+magocracy_valyrian_building_tax_tier_3 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 2]
+magocracy_valyrian_building_tax_tier_4 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 3]
+magocracy_valyrian_building_tax_tier_5 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 4]
+magocracy_valyrian_building_tax_tier_6 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 5]
+magocracy_valyrian_building_tax_tier_7 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 6]
+magocracy_valyrian_building_tax_tier_8 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 7]
+magocracy_valyrian_building_tax_tier_9 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 8]
+magocracy_valyrian_building_tax_tier_10 = @[magocracy_valyrian_tax_base + magocracy_valyrian_tax_step * 9]

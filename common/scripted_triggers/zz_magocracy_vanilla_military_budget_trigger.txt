@@ -1,0 +1,12 @@
+﻿## Vanilla override (common/scripted_triggers/00_law_triggers.txt)
+# Unchanged except that the Magocracy keeps the military budget laws: vanilla keeps them from every
+# government with the republic flag, and the Magocracy has that flag for its republic content.
+
+realm_uses_military_treasury_laws_trigger = {
+	is_independent_ruler = yes
+	realm_uses_treasury_laws_trigger = yes
+	OR = {
+		NOT = { government_has_flag = government_is_republic }
+		government_has_flag = government_is_magocracy # SOTHM Magocracy
+	}
+}

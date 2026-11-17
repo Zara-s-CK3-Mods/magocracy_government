@@ -1,0 +1,1089 @@
+﻿# Valyrian District great projects, cloned from the Freehold's: the Spires project founds the district
+# in a free regular district slot of any county capital of the realm and raises the Spires; the others add the Valyrian buildings to it.
+@great_project_default_icon = "gfx/interface/icons/great_projects/_default.dds"
+
+magocracy_construct_valyrian_spires_project = {
+	icon = {
+		reference = @great_project_default_icon
+	}
+	illustration = {
+		reference = "gfx/interface/illustrations/zz_valyria_projects/zz_valyria_tower.dds"
+	}
+
+	name = {
+		desc = great_project_type_magocracy_construct_valyrian_spires_project
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+	}
+
+	province_filter = top_realm
+
+	# Anyone may plan it; only the target county decides
+	can_start_planning = {}
+
+	is_location_valid = {
+		scope:province = {
+			is_county_capital = yes
+			custom_tooltip = {
+				text = magocracy_valyrian_spires_location_tt
+				OR = {
+					has_free_district_slot = yes
+					has_building_or_higher = magocracy_valyrian_spires_01
+				}
+			}
+			custom_tooltip = {
+				text = magocracy_valyrian_spires_maxed_tt
+				NOT = { has_building_or_higher = magocracy_valyrian_spires_08 }
+			}
+			custom_tooltip = {
+				text = GREAT_PROJECT_CAN_PLAN
+				NOT = {
+					any_great_project_in_province = {
+						great_project_type = magocracy_construct_valyrian_spires_project
+					}
+				}
+			}
+		}
+	}
+
+	owner = province_owner
+
+	is_valid = {}
+
+	cost = {
+		treasury_or_gold = great_project_base_starting_cost
+	}
+
+	construction_time = {
+		value = great_project_base_construction_time
+		multiply = common_great_project_construction_time_multiplier_value
+	}
+
+	contributor_cooldown = standard_contributor_cooldown_value
+
+	allowed_contributor_filter = {
+		owner = yes
+		vassals = yes
+	}
+
+	on_start_build = {}
+	on_cancel = {}
+
+	on_complete = {
+		custom_tooltip = {
+			text = great_project_type_magocracy_construct_valyrian_spires_project_province_gains
+			scope:province ?= {
+				if = {
+					limit = {
+						NOT = { has_building_or_higher = magocracy_valyrian_spires_01 }
+					}
+					add_regular_district = magocracy_valyrian_district
+				}
+				else = {
+					random_built_regular_district = {
+					limit = { district_type = district_type:magocracy_valyrian_district }
+						if = {
+							limit = { has_building = magocracy_valyrian_spires_07 }
+							upgrade_building_effect = magocracy_valyrian_spires_07
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_06 }
+							upgrade_building_effect = magocracy_valyrian_spires_06
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_05 }
+							upgrade_building_effect = magocracy_valyrian_spires_05
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_04 }
+							upgrade_building_effect = magocracy_valyrian_spires_04
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_03 }
+							upgrade_building_effect = magocracy_valyrian_spires_03
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_02 }
+							upgrade_building_effect = magocracy_valyrian_spires_02
+						}
+						else_if = {
+							limit = { has_building = magocracy_valyrian_spires_01 }
+							upgrade_building_effect = magocracy_valyrian_spires_01
+						}
+					}
+				}
+			}
+		}
+		scope:founder ?= {
+			if = {
+				limit = { is_alive = yes }
+				change_influence = minister_influence_gain_value
+			}
+		}
+	}
+
+	project_contributions = {
+		base_materials = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+						is_liege_or_above_of = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		magical_material = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		work_force = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 2
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+	}
+
+	ai_target_quick_trigger = {
+		adult = yes
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_will_do = {
+		value = 30
+		if = {
+			limit = { treasury >= 20000 }
+			add = 70
+		}
+		if = {
+			limit = { is_at_war = yes }
+			multiply = 0
+		}
+	}
+}
+
+magocracy_construct_mages_spire_project = {
+	icon = {
+		reference = @great_project_default_icon
+	}
+	illustration = {
+		reference = "gfx/interface/illustrations/zz_valyria_projects/zz_valyria_mages_tower.dds"
+	}
+
+	name = {
+		desc = great_project_type_magocracy_construct_mages_spire_project
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+	}
+
+	province_filter = top_realm
+
+	# Anyone may plan it; only the target county decides
+	can_start_planning = {}
+
+	is_location_valid = {
+		scope:province = {
+			custom_tooltip = {
+				text = magocracy_valyrian_district_exists_tt
+				has_building_or_higher = magocracy_valyrian_spires_01
+			}
+			custom_tooltip = {
+				text = magocracy_mages_spire_already_built_tt
+				NOT = { has_building_or_higher = zz_mages_tower_tower_01 }
+			}
+			custom_tooltip = {
+				text = magocracy_valyrian_district_free_slot_tt
+				any_built_regular_district = {
+					district_type = district_type:magocracy_valyrian_district
+					free_building_slots >= 1
+				}
+			}
+			custom_tooltip = {
+				text = GREAT_PROJECT_CAN_PLAN
+				NOT = {
+					any_great_project_in_province = {
+						great_project_type = magocracy_construct_mages_spire_project
+					}
+				}
+			}
+		}
+	}
+
+	owner = province_owner
+
+	is_valid = {}
+
+	cost = {
+		treasury_or_gold = great_project_base_starting_cost
+	}
+
+	construction_time = {
+		value = great_project_base_construction_time
+		multiply = common_great_project_construction_time_multiplier_value
+	}
+
+	contributor_cooldown = standard_contributor_cooldown_value
+
+	allowed_contributor_filter = {
+		owner = yes
+		vassals = yes
+	}
+
+	on_start_build = {}
+	on_cancel = {}
+
+	on_complete = {
+		custom_tooltip = {
+			text = great_project_type_magocracy_construct_mages_spire_project_province_gains
+			scope:province ?= {
+				random_built_regular_district = {
+					limit = { district_type = district_type:magocracy_valyrian_district }
+					add_building = zz_mages_tower_tower_01
+				}
+			}
+		}
+		scope:founder ?= {
+			if = {
+				limit = { is_alive = yes }
+				change_influence = minister_influence_gain_value
+			}
+		}
+	}
+
+	project_contributions = {
+		base_materials = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+						is_liege_or_above_of = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		magical_material = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		work_force = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 2
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		acolytes = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+						is_liege_or_above_of = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 2
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+	}
+
+	ai_target_quick_trigger = {
+		adult = yes
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_will_do = {
+		value = 30
+		if = {
+			limit = { treasury >= 20000 }
+			add = 70
+		}
+		if = {
+			limit = { is_at_war = yes }
+			multiply = 0
+		}
+	}
+}
+
+magocracy_construct_valyrian_roads_project = {
+	icon = {
+		reference = @great_project_default_icon
+	}
+	illustration = {
+		reference = "gfx/interface/illustrations/zz_valyria_projects/zz_valyria_blackstone_roads.dds"
+	}
+
+	name = {
+		desc = great_project_type_magocracy_construct_valyrian_roads_project
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+	}
+
+	province_filter = top_realm
+
+	# Anyone may plan it; only the target county decides
+	can_start_planning = {}
+
+	is_location_valid = {
+		scope:province = {
+			custom_tooltip = {
+				text = magocracy_valyrian_district_exists_tt
+				has_building_or_higher = magocracy_valyrian_spires_01
+			}
+			custom_tooltip = {
+				text = magocracy_valyrian_roads_maxed_tt
+				NOT = { has_building_or_higher = magocracy_valyrian_roads_02 }
+			}
+			OR = {
+				has_building_or_higher = magocracy_valyrian_roads_01
+				custom_tooltip = {
+					text = magocracy_valyrian_district_free_slot_tt
+					any_built_regular_district = {
+					district_type = district_type:magocracy_valyrian_district
+					free_building_slots >= 1
+				}
+				}
+			}
+			custom_tooltip = {
+				text = GREAT_PROJECT_CAN_PLAN
+				NOT = {
+					any_great_project_in_province = {
+						great_project_type = magocracy_construct_valyrian_roads_project
+					}
+				}
+			}
+		}
+	}
+
+	owner = province_owner
+
+	is_valid = {}
+
+	cost = {
+		treasury_or_gold = great_project_base_starting_cost
+	}
+
+	construction_time = {
+		value = great_project_base_construction_time
+		multiply = common_great_project_construction_time_multiplier_value
+	}
+
+	contributor_cooldown = standard_contributor_cooldown_value
+
+	allowed_contributor_filter = {
+		owner = yes
+		vassals = yes
+	}
+
+	on_start_build = {}
+	on_cancel = {}
+
+	on_complete = {
+		custom_tooltip = {
+			text = great_project_type_magocracy_construct_valyrian_roads_project_province_gains
+			scope:province ?= {
+				random_built_regular_district = {
+					limit = { district_type = district_type:magocracy_valyrian_district }
+					if = {
+						limit = { has_building = magocracy_valyrian_roads_01 }
+						upgrade_building_effect = magocracy_valyrian_roads_01
+					}
+					else = {
+						add_building = magocracy_valyrian_roads_01
+					}
+				}
+			}
+		}
+		scope:founder ?= {
+			if = {
+				limit = { is_alive = yes }
+				change_influence = minister_influence_gain_value
+			}
+		}
+	}
+
+	project_contributions = {
+		base_materials = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+						is_liege_or_above_of = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		magical_material = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		work_force = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 2
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+	}
+
+	ai_target_quick_trigger = {
+		adult = yes
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_will_do = {
+		value = 30
+		if = {
+			limit = { treasury >= 20000 }
+			add = 70
+		}
+		if = {
+			limit = { is_at_war = yes }
+			multiply = 0
+		}
+	}
+}
+
+magocracy_construct_valyrian_walls_project = {
+	icon = {
+		reference = @great_project_default_icon
+	}
+	illustration = {
+		reference = "gfx/interface/illustrations/zz_valyria_projects/zz_valyria_blackstone_walls.dds"
+	}
+
+	name = {
+		desc = great_project_type_magocracy_construct_valyrian_walls_project
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+	}
+
+	province_filter = top_realm
+
+	# Anyone may plan it; only the target county decides
+	can_start_planning = {}
+
+	is_location_valid = {
+		scope:province = {
+			custom_tooltip = {
+				text = magocracy_valyrian_district_exists_tt
+				has_building_or_higher = magocracy_valyrian_spires_01
+			}
+			custom_tooltip = {
+				text = magocracy_valyrian_walls_built_tt
+				NOT = { has_building_or_higher = magocracy_valyrian_walls_01 }
+			}
+			custom_tooltip = {
+				text = magocracy_valyrian_district_free_slot_tt
+				any_built_regular_district = {
+					district_type = district_type:magocracy_valyrian_district
+					free_building_slots >= 1
+				}
+			}
+			custom_tooltip = {
+				text = GREAT_PROJECT_CAN_PLAN
+				NOT = {
+					any_great_project_in_province = {
+						great_project_type = magocracy_construct_valyrian_walls_project
+					}
+				}
+			}
+		}
+	}
+
+	owner = province_owner
+
+	is_valid = {}
+
+	cost = {
+		treasury_or_gold = great_project_base_starting_cost
+	}
+
+	construction_time = {
+		value = great_project_base_construction_time
+		multiply = common_great_project_construction_time_multiplier_value
+	}
+
+	contributor_cooldown = standard_contributor_cooldown_value
+
+	allowed_contributor_filter = {
+		owner = yes
+		vassals = yes
+	}
+
+	on_start_build = {}
+	on_cancel = {}
+
+	on_complete = {
+		custom_tooltip = {
+			text = great_project_type_magocracy_construct_valyrian_walls_project_province_gains
+			scope:province ?= {
+				random_built_regular_district = {
+					limit = { district_type = district_type:magocracy_valyrian_district }
+					add_building = magocracy_valyrian_walls_01
+				}
+			}
+		}
+		scope:founder ?= {
+			if = {
+				limit = { is_alive = yes }
+				change_influence = minister_influence_gain_value
+			}
+		}
+	}
+
+	project_contributions = {
+		base_materials = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+						is_liege_or_above_of = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		magical_material = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 4
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+		work_force = {
+			contributor_is_valid = {
+				custom_tooltip = {
+					text = great_project_contribution_must_be_province_owner_or_above
+					OR = {
+						this = scope:great_project.great_project_location.province_owner
+					}
+				}
+			}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 2
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			is_required = yes
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 9
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = {
+				value = chinese_great_projects_contribution_ai_will_do_base_value
+			}
+		}
+	}
+
+	ai_target_quick_trigger = {
+		adult = yes
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_will_do = {
+		value = 30
+		if = {
+			limit = { treasury >= 20000 }
+			add = 70
+		}
+		if = {
+			limit = { is_at_war = yes }
+			multiply = 0
+		}
+	}
+}

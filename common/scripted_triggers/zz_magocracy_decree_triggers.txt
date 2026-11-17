@@ -1,0 +1,35 @@
+﻿# Magocracy decrees: shared triggers
+
+# A Constitutional Conclave must vote on decrees, as the vanilla constitutional assembly does
+magocracy_decree_requires_approval_trigger = {
+	OR = {
+		has_realm_law = magocracy_conclave_authority_constitutional
+		has_realm_law = republic_assembly_authority_constitutional
+	}
+}
+
+# The realm's magisters together hold at least $COST$ mana
+magocracy_decree_has_mana_trigger = {
+	custom_tooltip = {
+		text = magocracy_decree_not_enough_mana_tt
+		magocracy_realm_mana_pool_value >= $COST$
+	}
+}
+
+# A magister who has studied blood magic
+magocracy_is_blood_mage_trigger = {
+	has_trait = zz_magister
+	has_trait_xp = {
+		trait = zz_magister
+		track = blood_magic
+		value > 0
+	}
+}
+
+# The realm's current stance on the blood rites, kept on the head's primary title so it outlasts the head
+magocracy_blood_rites_proscribed_trigger = {
+	primary_title ?= { var:magocracy_blood_rites ?= flag:proscribed }
+}
+magocracy_blood_rites_sanctioned_trigger = {
+	primary_title ?= { var:magocracy_blood_rites ?= flag:sanctioned }
+}

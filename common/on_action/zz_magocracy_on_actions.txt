@@ -1,0 +1,64 @@
+﻿on_title_gain = {
+	on_actions = { magocracy_on_title_gain }
+}
+
+yearly_playable_pulse = {
+	on_actions = {
+		magocracy_yearly_sync
+		magocracy_yearly_conclave
+		magocracy_yearly_family_title
+	}
+}
+
+# root = new holder
+magocracy_on_title_gain = {
+	effect = {
+		magocracy_sync_government_effect = yes
+	}
+}
+
+# Families that still hold a plain noble family title (e.g. from before title_type_magocracy_family existed)
+magocracy_yearly_family_title = {
+	trigger = { has_government = magocracy_government }
+	effect = { magocracy_family_title_conversion_effect = yes }
+}
+
+magocracy_yearly_sync = {
+	trigger = {
+		government_has_mechanic = administrative
+		NOT = { has_government = magocracy_government }
+	}
+	effect = {
+		magocracy_sync_government_effect = yes
+	}
+}
+
+# Mage's Commune versions of estate events (events/zz_mages_commune_events.txt)
+on_siege_completion = {
+	events = {
+		mages_commune_events.1 # Capture prisoners at a besieged Mage's Commune
+	}
+}
+
+on_raid_action_completion = {
+	events = {
+		mages_commune_events.2 # Kidnap prisoners at a raided Mage's Commune
+	}
+}
+
+on_trigger_court_events = {
+	random_events = {
+		100 = mages_commune_events.3 # Admin stewardship court, Mage's Commune version
+	}
+}
+
+# Refresh the Conclave of Magisters as magisters rise, fall and come of age
+magocracy_yearly_conclave = {
+	trigger = {
+		magocracy_is_conclave_head_trigger = yes
+	}
+	effect = {
+		magocracy_ensure_conclave_laws_effect = yes
+		update_assembly = yes
+	}
+}

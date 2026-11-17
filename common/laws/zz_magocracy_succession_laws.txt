@@ -1,0 +1,108 @@
+﻿## Magocracy election
+#
+# The head of a Magocracy is elected by the Conclave (its assembly), as in a republic. Any mage of the realm can be elected.
+# Governors below the head keep administrative appointment.
+# The head serves a term set by the vanilla republic term length laws (republic_assembly_term_length_*).
+#
+magocracy_elective_succession_law = {
+	law_group_type = succession_order_laws
+	index = 39
+
+	can_keep = {
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = yes
+	}
+	can_have = {
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = yes
+	}
+	can_pass = {
+		government_has_flag = government_is_magocracy
+	}
+	should_start_with = {
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = yes
+	}
+
+	succession = {
+		allow_same_successor = yes
+		order_of_succession = election
+		election_type = magocracy_elective
+		use_term_length = yes
+	}
+
+	flag = elective_succession_law
+	flag = succession_uses_term_length
+
+	pass_cost = {
+		prestige = change_title_succession_law_prestige_cost
+	}
+	revoke_cost = {
+		prestige = change_title_succession_law_prestige_cost
+	}
+
+	ai_will_do = {
+		value = 100
+	}
+
+	potential = {
+		government_has_flag = government_is_magocracy
+	}
+}
+
+## Magocracy governorships
+#
+# Governors are appointed as in vanilla, but through magocracy_governor (common/succession_appointment),
+# which also offers the noble houses and passes over spouses.
+#
+magocracy_appointment_succession_law = {
+	law_group_type = succession_order_laws
+	index = 40
+
+	can_keep = {
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = no
+	}
+	can_have = {
+		has_ep3_dlc_trigger = yes
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = no
+	}
+	can_pass = {
+		can_change_appointment_succession_law_trigger = yes
+	}
+	should_start_with = {
+		government_has_flag = government_is_magocracy
+		is_independent_ruler = no
+	}
+
+	succession = {
+		order_of_succession = appointment
+		appointment_type = magocracy_governor
+	}
+
+	flag = advanced_succession_law
+	flag = appointment_type_succession
+
+	modifier = {
+		glory_hound_opinion = -10
+		parochial_opinion = -5
+		player_heir_opinion = 20
+		eligible_child_except_player_heir_opinion = -5
+	}
+
+	pass_cost = {
+		prestige = change_succession_law_prestige_cost
+	}
+	revoke_cost = {
+		prestige = change_succession_law_prestige_cost
+	}
+
+	ai_will_do = {
+		value = 100
+	}
+
+	potential = {
+		government_has_flag = government_is_magocracy
+	}
+}

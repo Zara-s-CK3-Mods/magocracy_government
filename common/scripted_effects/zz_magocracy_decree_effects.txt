@@ -1,0 +1,71 @@
+﻿# Magocracy decrees: shared effects (root = the head of the Conclave)
+
+# Lists every magister in the realm as magocracy_realm_mages
+magocracy_list_realm_mages_effect = {
+	if = {
+		limit = { has_trait = zz_magister }
+		add_to_list = magocracy_realm_mages
+	}
+	every_courtier = {
+		limit = { has_trait = zz_magister }
+		add_to_list = magocracy_realm_mages
+	}
+	every_vassal_or_below = {
+		limit = { has_trait = zz_magister }
+		add_to_list = magocracy_realm_mages
+	}
+}
+
+# Draws $COST$ mana from the realm's magisters, each paying in proportion to what they hold.
+# Magisters other than the head who did not pledge support for the decree resent it.
+# Run before gdp_enacted_decree_effect, which clears the pledges.
+magocracy_decree_spend_mana_effect = {
+	save_scope_value_as = { name = magocracy_mana_cost value = $COST$ }
+	save_scope_value_as = { name = magocracy_mana_pool value = magocracy_realm_mana_pool_value }
+	custom_tooltip = magocracy_decree_spend_mana_tt
+	hidden_effect = {
+		magocracy_list_realm_mages_effect = yes
+		every_in_list = {
+			list = magocracy_realm_mages
+			limit = { has_variable = zz_drops_of_power }
+			change_variable = {
+				name = zz_drops_of_power
+				subtract = {
+					value = zz_valyria_drops_of_power_stat
+					multiply = scope:magocracy_mana_cost
+					divide = scope:magocracy_mana_pool
+					ceiling = yes
+					max = zz_valyria_drops_of_power_stat
+				}
+			}
+			if = {
+				limit = {
+					this != root
+					NOT = {
+						root = {
+							is_target_in_variable_list = {
+								name = decree_approvers
+								target = prev
+							}
+						}
+					}
+				}
+				add_opinion = {
+					target = root
+					modifier = magocracy_mana_drawn_opinion
+				}
+			}
+		}
+	}
+}
+
+# Clears either blood rites stance from the realm's magisters
+magocracy_clear_blood_rites_effect = {
+	every_in_list = {
+		list = magocracy_realm_mages
+		remove_character_modifier = magocracy_blood_arts_proscribed_modifier
+		remove_character_modifier = magocracy_blood_arts_sanctioned_modifier
+	}
+	remove_character_modifier = magocracy_proscriber_modifier
+	remove_character_modifier = magocracy_sanctioner_modifier
+}

@@ -1,0 +1,101 @@
+﻿# Magocracy governorships: vanilla admin_governor, but noble houses also stand for the title and spouses of office holders are passed over unless backed.
+magocracy_governor = {
+	default_candidates = { holder_close_family unlanded_noble_house_head unlanded_noble_close_family }
+
+	candidate_score = {
+		value = {
+			# Base - Based on skills
+			add = {
+				value = martial
+				add = diplomacy
+				add = stewardship
+				add = intrigue
+				add = learning
+				multiply = 1
+				desc = sum_of_skills_desc
+			}
+
+			add = appointment_score_base
+			add = appointment_score_non_military
+			add = appointment_score_non_merit
+			add = appointment_score_governor
+
+			# PIETY LEVEL (from admin family attribute)
+			if = {
+				limit = {
+					piety_level >= 1
+					house ?= {
+						OR = {
+							has_house_aspiration_parameter = candidate_score_per_piety_level_1
+							has_house_aspiration_parameter = candidate_score_per_piety_level_2
+							has_house_aspiration_parameter = candidate_score_per_piety_level_3
+						}
+					}
+				}
+				add = {
+					value = 0
+					add = {
+						if = {
+							limit = {
+								house ?= { has_house_aspiration_parameter = candidate_score_per_piety_level_3 }
+							}
+							add = candidate_score_per_piety_level_3_value
+						}
+						else_if = {
+							limit = {
+								house ?= { has_house_aspiration_parameter = candidate_score_per_piety_level_2 }
+							}
+							add = candidate_score_per_piety_level_2_value
+						}
+						else = {
+							add = candidate_score_per_piety_level_1_value
+						}
+					}
+					multiply = piety_level
+					desc = "family_attribute_desc"
+				}
+			}
+
+			add = appointment_score_final_factors
+
+			# SOTHM: as in its admin_governor
+			if = {
+				limit = {
+					has_trait = zz_loyal_functionary
+				}
+				multiply = {
+					value = 0
+					desc = appointment_is_top_liege
+				}
+			}
+
+			# Spouses of the Magocracy's office holders keep doing their own job, so they rank low
+			# unless someone deliberately backs them: investment, the Promote scheme or a house petition
+			if = {
+				limit = {
+					any_spouse = {
+						top_liege = scope:title.holder.top_liege
+						OR = {
+							is_landed = yes
+							is_councillor = yes
+						}
+					}
+					NOR = {
+						has_succession_appointment_investors = scope:title
+						has_character_modifier = scheme_promoted_modifier
+						scope:title.var:petition_house_rights ?= house
+					}
+				}
+				# Comes last and wipes the score first, so no amount of skill or prestige (immortals!) outweighs it
+				multiply = {
+					value = 0
+					desc = magocracy_governor_spouse_desc
+				}
+				subtract = {
+					value = 10000
+					desc = magocracy_governor_spouse_desc
+				}
+			}
+		}
+	}
+}

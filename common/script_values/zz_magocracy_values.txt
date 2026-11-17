@@ -1,0 +1,60 @@
+﻿# House power: the administrative score plus each magister in the house (zz_mage_power_value is from Secrets of Ambrosius)
+magocracy_house_power_score = {
+	value = administrative_house_power_score
+	if = {
+		limit = { exists = house_head }
+		add = {
+			every_house_member = {
+				limit = { has_trait = zz_magister }
+				add = zz_mage_power_value
+			}
+			desc = magocracy_mages_house_desc
+		}
+		# Mage's Commune in the realm capital (the administrative score only counts estates)
+		if = {
+			limit = {
+				house_head = {
+					exists = top_liege.capital_province
+					domicile ?= {
+						domicile_is_mages_commune_trigger = yes
+						domicile_location = prev.top_liege.capital_province
+					}
+				}
+			}
+			add = {
+				value = 10
+				desc = magocracy_commune_in_capital_desc
+			}
+		}
+	}
+	round = yes
+}
+
+# Election weight a candidate gets from their mastery of the higher mysteries
+magocracy_candidate_magister_score = {
+	value = 0
+	if = {
+		limit = { has_trait = zz_magister }
+		add = 25
+		add = {
+			value = zz_mage_power_value
+			multiply = 2
+		}
+	}
+}
+
+magocracy_conversion_cost_value = {
+	value = 800
+	if = {
+		limit = { primary_title.tier >= tier_empire }
+		multiply = 2
+	}
+	else_if = {
+		limit = { primary_title.tier >= tier_kingdom }
+		multiply = 1.5
+	}
+	if = {
+		limit = { is_independent_ruler = no }
+		multiply = 0.1
+	}
+}

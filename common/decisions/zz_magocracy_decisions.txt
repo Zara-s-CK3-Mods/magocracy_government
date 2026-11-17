@@ -1,0 +1,84 @@
+﻿found_magocracy_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_cerimonial_decision.dds"
+	}
+	decision_group_type = realm
+	sort_order = 41
+	desc = found_magocracy_decision_desc
+	selection_tooltip = found_magocracy_decision_tooltip
+	confirm_text = found_magocracy_decision_confirm
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 120
+		kingdom = 120
+		empire = 120
+		hegemony = 0
+	}
+
+	cooldown = { years = 20 }
+
+	is_shown = {
+		has_trait = zz_magister
+		is_landed = yes
+		NOT = { has_government = magocracy_government }
+		highest_held_title_tier >= tier_duchy
+		trigger_if = {
+			limit = { is_independent_ruler = no }
+			liege = { has_government = magocracy_government }
+		}
+	}
+
+	is_valid = {
+		has_ep3_dlc_trigger = yes
+		has_gdp_dlc_trigger = yes
+		NOR = {
+			government_has_flag = government_is_nomadic
+			government_has_flag = government_is_theocracy
+			government_has_flag = government_is_ecclesiastical
+			government_has_flag = government_is_landless_adventurer
+			government_is_japanese_trigger = yes
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+		is_at_war = no
+	}
+
+	cost = {
+		prestige = {
+			value = 1000
+			if = {
+				limit = { is_independent_ruler = no }
+				multiply = 0.1
+			}
+		}
+		gold = magocracy_conversion_cost_value
+	}
+
+	effect = {
+		magocracy_convert_realm_effect = yes
+		if = {
+			limit = { is_independent_ruler = yes }
+			add_legitimacy_effect = { LEGITIMACY = admin_convert_legitimacy_value }
+		}
+	}
+
+	ai_potential = {
+		has_trait = zz_magister
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			add = 10
+			"has_trait_xp(zz_magister|secrets_of_the_higher_mysteries)" >= 50
+		}
+		modifier = {
+			add = 15
+			ai_greed >= 50
+		}
+	}
+}

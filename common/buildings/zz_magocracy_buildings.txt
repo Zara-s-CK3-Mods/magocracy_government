@@ -1,0 +1,27 @@
+﻿# Mage's Tower: ported from the Freehold mod, now part of the Valyrian District.
+# Secrets of Ambrosius looks for its flag (zz_mages_tower_tower_01) to show the magic research decision
+# and boost drops of power, so keep the key and flag.
+zz_mages_tower_tower_01 = {
+	construction_time = very_slow_construction_time
+
+	type_icon = "zz_mages_tower.dds"
+	great_project_type = magocracy_construct_mages_spire_project
+
+	province_modifier = {
+		fort_level = 4
+	}
+	county_holding_modifier = {
+		holding = city_holding
+		income_mult = 0.5
+	}
+	character_modifier = {
+		owned_legend_spread_mult = 0.5
+		zz_drops_of_power_holding_construction_piety_cost = 0.2
+	}
+
+	ai_value = {
+		base = 100
+	}
+
+	flag = zz_mages_tower_tower_01
+}

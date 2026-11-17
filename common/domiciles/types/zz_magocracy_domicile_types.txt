@@ -1,0 +1,1442 @@
+﻿# Magocracy: the Mage's Commune - merchant company art, estate and merchant company buildings, ten external slots
+mages_commune = {
+
+	initial_buildings = {
+		mages_commune_merchant_company_building_production_01
+		mages_commune_merchant_company_building_trade_01
+		mages_commune_merchant_company_building_warehouse_01
+		mages_commune_merchant_company_building_civic_01
+	}
+
+	rename_window = house
+
+	header = {
+		trigger = { company_domicile_asian_asset_trigger = yes }
+		reference = "gfx/interface/window_domiciles/domicile_header_background_asia.dds"
+	}
+	header = "gfx/interface/window_domiciles/domicile_header_background_merchant.dds"
+	frame = {
+		trigger = { company_domicile_asian_asset_trigger = yes }
+		reference = "gfx/interface/window_domiciles/domicile_frame_asia.dds"
+	}
+	frame = "gfx/interface/window_domiciles/domicile_frame.dds"
+
+	illustration = "gfx/interface/illustrations/event_scenes/gdp_merchant_domicile.dds"
+	icon = "gfx/interface/icons/flat_icons/domicile_merchant.dds"
+	map_pin_texture = "gfx/interface/icons/map_icons/map_icon_company.dds"
+	map_pin_anchor = up
+	map_pin_lobby = yes
+
+	can_move_manually = yes
+	move_instantly = no
+	culture_and_faith = yes
+	acumen = yes
+
+	move_cooldown = { days = estate_move_cooldown_value }
+	move_cost = {
+		gold = merchant_company_move_cost_value
+	}
+
+	on_move_start = {
+		owner = { gdp_move_company_invalidate_trade_effect = yes }
+	}
+	on_move_end = {
+		gdp_company_location_buildings_refund_effect = yes
+	}
+	# 6 base + 4 from the merchant villa = the 10 external slots below
+	base_external_slots = 6
+
+	domicile_building_slots = {
+		external_slot_1 = {
+			position = { 12.3% 12.5% }
+			size = { 14% 29% }
+			depth = 2
+
+			# Empty slot Western
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_production_empty_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_production_western_mask.png"
+			}
+
+			# Under Construction Western
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_western_mask.png"
+			}
+
+			# Empty slot Asian
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_production_empty_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_production_asian_mask.png"
+			}
+
+			# Under Construction Asian
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_asian_mask.png"
+			}
+
+			# Empty slot Mena
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_production_empty_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_production_mena_mask.png"
+			}
+
+			# Under Construction Mena
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_mena_mask.png"
+			}
+		}
+
+		external_slot_2 = {
+			position = { 62.5% 14.5% }
+			size = { 14% 29% }
+			depth = 2
+
+			# Empty slot Western
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_trading_empty_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_western_mask.png"
+			}
+
+			# Under Construction Western
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_western_mask.png"
+			}
+
+			# Empty slot Asian
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_trading_empty_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_asian_mask.png"
+			}
+
+			# Under Construction Asian
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_asian_mask.png"
+			}
+
+			# Empty slot Mena
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_trading_empty_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_mena_mask.png"
+			}
+
+			# Under Construction Mena
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_mena_mask.png"
+			}
+		}
+
+		main_slot = {
+			slot_type = main
+			position = { 31.7% 7.4% }
+			size = { 28% 34.5% }
+			depth = 2
+
+			# Empty slot
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_04_mask.png"
+			}
+
+			# Under Construction Western
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_main_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_main_western_mask.png"
+			}
+
+			# Under Construction Asian
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_main_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_main_asian_mask.png"
+			}
+
+			# Under Construction Mena
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_main_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_main_mena_mask.png"
+			}
+		}
+
+		external_slot_3 = {
+			position = { 9.0% 40% }
+			size = { 16% 31% }
+			depth = 3
+
+			# Empty slot Western warehouse
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_warehouse_empty_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_warehouse_western_mask.png"
+			}
+
+			# Empty slot Western port
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_port_empty_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_port_western_mask.png"
+			}
+
+			# Under Construction Western
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_western_mask.png"
+			}
+
+			# Under Construction Western port
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_port_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_port_western_mask.png"
+			}
+
+			# Empty slot Asian warehouse
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_warehouse_empty_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_warehouse_asian_mask.png"
+			}
+
+			# Empty slot Asian port
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_port_empty_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_port_asian_mask.png"
+			}
+
+			# Under Construction Asian
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_asian_mask.png"
+			}
+
+			# Under Construction Asian port
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_port_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_port_asian_mask.png"
+			}
+
+			# Empty slot Mena warehouse
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_warehouse_empty_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_mena_mask.png"
+			}
+
+			# Empty slot Mena port
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_port_empty_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_mena_mask.png"
+			}
+
+			# Under Construction Mena
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = no }
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_mena_mask.png"
+			}
+
+			# Under Construction Mena port
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.county = { is_coastal_county = yes }
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_port_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_port_mena_mask.png"
+			}
+		}
+
+		external_slot_4 = {
+			position = { 59.5% 43% } #43% 52% #64% 29%
+			size = { 17% 32% }
+			depth = 4
+
+			# Empty slot Western
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_company_quarters_empty_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_company_quarters_western_mask.png"
+			}
+
+			# Under Construction Western
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_western_culture_group_trigger = yes
+							has_graphical_norse_culture_group_trigger = yes
+							has_graphical_mediterranean_culture_group_trigger = yes
+							AND = {
+								has_graphical_iberian_culture_group_trigger = yes
+								NOT = { has_cultural_pillar = language_arabic }
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_western_mask.png"
+			}
+
+			# Empty slot Asian
+			empty_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_company_quarters_empty_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_company_quarters_asian_mask.png"
+			}
+
+			# Under Construction Asian
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						OR = {
+							has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+							AND = {
+								has_graphical_steppe_culture_group_trigger = yes
+								has_cultural_pillar = heritage_mongolic
+							}
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_asian.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_asian_mask.png"
+			}
+
+			# Empty slot Mena
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_company_quarters_empty_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_empty_slot_trading_mena_mask.png"
+			}
+
+			# Under Construction Mena
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/merchant_company_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/merchant_company_construction_mena_mask.png"
+			}
+		}
+
+		# Six extra slots on top of the merchant company's four
+		magocracy_slot_1 = {
+			position = { 78% 8% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_01.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_01_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty_02.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_02_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+		magocracy_slot_2 = {
+			position = { 78% 40% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_04_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_05_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty_03.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_03_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty_03.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_03_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_03.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_03_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+		magocracy_slot_3 = {
+			position = { 25.5% 44% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_02.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_02_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_06_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_06_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_06_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+		magocracy_slot_4 = {
+			position = { 42% 44% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_03.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_03_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_04_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_04_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_04_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_04.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_04_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+		magocracy_slot_5 = {
+			position = { 20% 68% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_05_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty_03.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_03_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_05_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty_02.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_02_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_02.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_02_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+		magocracy_slot_6 = {
+			position = { 64% 71% }
+			size = { 15% 29% }
+
+			empty_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/yurt_empty_slot_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/yurt_empty_slot_06_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = jungle
+							terrain = wetlands
+							terrain = floodplains
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_jungle_empty.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_jungle_empty_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = drylands
+							terrain = desert
+							terrain = desert_mountains
+							terrain = oasis
+							terrain = steppe
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_drylands_empty_02.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_drylands_empty_02_mask.png"
+			}
+
+			empty_slot_asset = {
+				trigger = {
+					domicile_location = {
+						OR = {
+							terrain = mountains
+							terrain = hills
+							terrain = terraced_hills
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_rough_empty_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_rough_empty_05_mask.png"
+			}
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_mask.png"
+			}
+
+
+			# Under Construction
+			construction_slot_asset = {
+				trigger = {
+					owner.culture = {
+						OR = {
+							has_graphical_chinese_culture_group_trigger = yes
+							has_graphical_japanese_culture_group_trigger = yes
+						}
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_chinese.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_chinese_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_mena_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_mena.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_mena_mask.png"
+			}
+			construction_slot_asset = {
+				trigger = {
+					domicile_location.culture = {
+						has_graphical_western_culture_group_trigger = yes
+					}
+				}
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_byzantine_mask.png"
+			}
+		}
+	}
+
+	artifact_slots = {
+		library_1
+		library_2
+		library_3
+		library_4
+		curio_1
+		curio_2
+		curio_3
+		curio_4
+		creature_1
+		creature_2
+		creature_3
+		creature_4
+	}
+
+	# BACKGROUNDS
+
+	# WESTERN
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = no }
+			domicile_location.culture = {
+				OR = {
+					has_graphical_western_culture_group_trigger = yes
+					has_graphical_norse_culture_group_trigger = yes
+					has_graphical_mediterranean_culture_group_trigger = yes
+					AND = {
+						has_graphical_iberian_culture_group_trigger = yes
+						NOT = { has_cultural_pillar = language_arabic }
+					}
+				}
+			}
+		}
+		background = "gfx/interface/window_domiciles/estate_background_merchant_city_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_04_western_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_03_western_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/estate_foreground_merchant_city_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = yes }
+			domicile_location.culture = {
+				OR = {
+					has_graphical_western_culture_group_trigger = yes
+					has_graphical_norse_culture_group_trigger = yes
+					has_graphical_mediterranean_culture_group_trigger = yes
+					AND = {
+						has_graphical_iberian_culture_group_trigger = yes
+						NOT = { has_cultural_pillar = language_arabic }
+					}
+				}
+			}
+		}
+		background = "gfx/interface/window_domiciles/estate_background_merchant_coastal_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_02_western_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_01_western_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/estate_foreground_merchant_coastal_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+
+	# EASTERN
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = no }
+			domicile_location.culture = {
+				OR = {
+					has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+					AND = {
+						has_graphical_steppe_culture_group_trigger = yes
+						has_cultural_pillar = heritage_mongolic
+					}
+				}
+			}
+		}
+		background = "gfx/interface/window_domiciles/asian_background_merchant_city_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_01_asian_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_02_asian_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/asian_foreground_merchant_city_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = yes }
+			domicile_location.culture = {
+				OR = {
+					has_graphical_east_asia_or_southeast_asia_group_trigger = yes
+					AND = {
+						has_graphical_steppe_culture_group_trigger = yes
+						has_cultural_pillar = heritage_mongolic
+					}
+				}
+			}
+		}
+		background = "gfx/interface/window_domiciles/asian_background_merchant_coastal_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_03_asian_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_02_asian_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/asian_foreground_merchant_coastal_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+
+	# MENA
+
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = no }
+		}
+
+		background = "gfx/interface/window_domiciles/estate_background_mena_merchant_city_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_04_mena_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_03_mena_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/estate_foreground_mena_merchant_city_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+
+	domicile_asset = {
+		trigger = {
+			domicile_location.county = { is_coastal_county = yes }
+		}
+
+		background = "gfx/interface/window_domiciles/estate_background_mena_merchant_coastal_terrain.dds"
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_02_mena_merchant.dds"
+			depth = 3
+		}
+		layer = {
+			texture = "gfx/interface/window_domiciles/estate_middleground_01_mena_merchant.dds"
+			depth = 5
+		}
+		foreground = "gfx/interface/window_domiciles/estate_foreground_mena_merchant_coastal_terrain.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_byzantine_urban"
+	}
+}

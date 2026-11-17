@@ -1,0 +1,1014 @@
+﻿# Magocracy decrees: magic decrees passed by the head of the Conclave.
+# Listed in the Republic window by the window_government_republic.gui override.
+
+magocracy_arcane_study_decree_decision = {
+	title = magocracy_arcane_study_decree_decision
+	desc = magocracy_arcane_study_decree_decision_desc
+	selection_tooltip = magocracy_arcane_study_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_erudition.dds"
+	}
+
+	sort_order = 1
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = total_republic_decree_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_list_realm_mages_effect = yes
+		every_in_list = {
+			list = magocracy_realm_mages
+			custom = magocracy_every_realm_mage
+			add_character_modifier = {
+				modifier = magocracy_arcane_study_modifier
+				years = 10
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}
+
+magocracy_mana_tithe_decree_decision = {
+	title = magocracy_mana_tithe_decree_decision
+	desc = magocracy_mana_tithe_decree_decision_desc
+	selection_tooltip = magocracy_mana_tithe_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_blood.dds"
+	}
+
+	sort_order = 2
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 5 }
+
+	cost = {
+		prestige = total_republic_decree_prestige_cost
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		custom_tooltip = {
+			text = magocracy_decree_head_is_mage_tt
+			has_trait = zz_magister
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_list_realm_mages_effect = yes
+		custom_tooltip = magocracy_mana_tithe_decree_decision_effect_tt
+		hidden_effect = {
+			every_in_list = {
+				list = magocracy_realm_mages
+				limit = {
+					this != root
+					has_variable = zz_drops_of_power
+					magocracy_mana_tithe_share_value > 0
+				}
+				save_scope_value_as = { name = tithe value = magocracy_mana_tithe_share_value }
+				change_variable = { name = zz_drops_of_power subtract = scope:tithe }
+				root = {
+					if = {
+						limit = { has_variable = zz_drops_of_power }
+						change_variable = { name = zz_drops_of_power add = scope:tithe }
+					}
+					else = {
+						set_variable = { name = zz_drops_of_power value = scope:tithe }
+					}
+				}
+				add_opinion = {
+					target = root
+					modifier = magocracy_mana_tithe_opinion
+				}
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = -10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 5
+	}
+}
+
+magocracy_ward_capital_decree_decision = {
+	title = magocracy_ward_capital_decree_decision
+	desc = magocracy_ward_capital_decree_decision_desc
+	selection_tooltip = magocracy_ward_capital_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_siege_warfare.dds"
+	}
+
+	sort_order = 3
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = total_republic_decree_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		magocracy_decree_has_mana_trigger = { COST = magocracy_ward_capital_decree_mana_cost }
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_decree_spend_mana_effect = { COST = magocracy_ward_capital_decree_mana_cost }
+		capital_province ?= {
+			add_province_modifier = {
+				modifier = magocracy_ward_capital_modifier
+				years = 10
+			}
+			county = {
+				add_county_modifier = {
+					modifier = magocracy_ward_capital_county_modifier
+					years = 10
+				}
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}
+
+magocracy_rite_of_plenty_decree_decision = {
+	title = magocracy_rite_of_plenty_decree_decision
+	desc = magocracy_rite_of_plenty_decree_decision_desc
+	selection_tooltip = magocracy_rite_of_plenty_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_golden_age.dds"
+	}
+
+	sort_order = 4
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 15 }
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		magocracy_decree_has_mana_trigger = { COST = magocracy_rite_of_plenty_decree_mana_cost }
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_decree_spend_mana_effect = { COST = magocracy_rite_of_plenty_decree_mana_cost }
+		every_realm_county = {
+			custom = magocracy_every_realm_county
+			add_county_modifier = {
+				modifier = magocracy_rite_of_plenty_modifier
+				years = 10
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}
+
+magocracy_muster_war_mages_decree_decision = {
+	title = magocracy_muster_war_mages_decree_decision
+	desc = magocracy_muster_war_mages_decree_decision_desc
+	selection_tooltip = magocracy_muster_war_mages_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_recruitment.dds"
+	}
+
+	sort_order = 5
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = total_republic_decree_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		magocracy_decree_has_mana_trigger = { COST = magocracy_muster_war_mages_decree_mana_cost }
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_decree_spend_mana_effect = { COST = magocracy_muster_war_mages_decree_mana_cost }
+		add_character_modifier = {
+			modifier = magocracy_war_mages_modifier
+			years = 5
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}
+
+magocracy_proscribe_blood_rites_decree_decision = {
+	title = magocracy_proscribe_blood_rites_decree_decision
+	desc = magocracy_proscribe_blood_rites_decree_decision_desc
+	selection_tooltip = magocracy_proscribe_blood_rites_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/pam_decision_act_of_devotion.dds"
+	}
+
+	sort_order = 6
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 15 }
+
+	cost = {
+		prestige = total_republic_decree_prestige_cost
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		custom_tooltip = {
+			text = magocracy_blood_rites_already_proscribed_tt
+			NOT = { magocracy_blood_rites_proscribed_trigger = yes }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_list_realm_mages_effect = yes
+		hidden_effect = { magocracy_clear_blood_rites_effect = yes }
+		primary_title = { set_variable = { name = magocracy_blood_rites value = flag:proscribed } }
+		custom_tooltip = magocracy_blood_rites_proscribed_tt
+		add_piety = major_piety_value
+		add_character_modifier = {
+			modifier = magocracy_proscriber_modifier
+			years = 15
+		}
+		every_in_list = {
+			list = magocracy_realm_mages
+			limit = { magocracy_is_blood_mage_trigger = yes }
+			custom = magocracy_every_realm_blood_mage
+			add_character_modifier = {
+				modifier = magocracy_blood_arts_proscribed_modifier
+				years = 15
+			}
+			add_opinion = {
+				target = root
+				modifier = magocracy_blood_proscribed_opinion
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 5
+	}
+}
+
+magocracy_sanction_blood_rites_decree_decision = {
+	title = magocracy_sanction_blood_rites_decree_decision
+	desc = magocracy_sanction_blood_rites_decree_decision_desc
+	selection_tooltip = magocracy_sanction_blood_rites_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_blood.dds"
+	}
+
+	sort_order = 7
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 15 }
+
+	cost = {
+		prestige = total_republic_decree_prestige_cost
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+		custom_tooltip = {
+			text = magocracy_blood_rites_already_sanctioned_tt
+			NOT = { magocracy_blood_rites_sanctioned_trigger = yes }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		magocracy_list_realm_mages_effect = yes
+		hidden_effect = { magocracy_clear_blood_rites_effect = yes }
+		primary_title = { set_variable = { name = magocracy_blood_rites value = flag:sanctioned } }
+		custom_tooltip = magocracy_blood_rites_sanctioned_tt
+		add_character_modifier = {
+			modifier = magocracy_sanctioner_modifier
+			years = 15
+		}
+		every_in_list = {
+			list = magocracy_realm_mages
+			limit = { magocracy_is_blood_mage_trigger = yes }
+			custom = magocracy_every_realm_blood_mage
+			add_character_modifier = {
+				modifier = magocracy_blood_arts_sanctioned_modifier
+				years = 15
+			}
+			add_opinion = {
+				target = root
+				modifier = magocracy_blood_sanctioned_opinion
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 5
+	}
+}
+
+magocracy_search_gifted_decree_decision = {
+	title = magocracy_search_gifted_decree_decision
+	desc = magocracy_search_gifted_decree_decision_desc
+	selection_tooltip = magocracy_search_gifted_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_invite_knights.dds"
+	}
+
+	sort_order = 8
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = total_republic_decree_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		custom_tooltip = magocracy_search_gifted_decree_decision_effect_tt
+		hidden_effect = {
+			random_list = {
+				50 = { save_scope_value_as = { name = gifted_count value = 1 } }
+				35 = { save_scope_value_as = { name = gifted_count value = 2 } }
+				15 = { save_scope_value_as = { name = gifted_count value = 3 } }
+			}
+			while = {
+				count = scope:gifted_count
+				create_character = {
+					age = { 16 25 }
+					gender_female_chance = 50
+					learning = { 8 16 }
+					trait = zz_magister
+					culture = root.culture
+					faith = root.faith
+					employer = root
+					dynasty = none
+				}
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}
+
+magocracy_state_forge_grant_decree_decision = {
+	title = magocracy_state_forge_grant_decree_decision
+	desc = magocracy_state_forge_grant_decree_decision_desc
+	selection_tooltip = magocracy_state_forge_grant_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_smith.dds"
+	}
+
+	sort_order = 9
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = magocracy_state_forge_grant_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		zz_valyria_create_artifact_vs_ingot_effect = { OWNER = root }
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 5
+	}
+}
+
+magocracy_arcane_archives_decree_decision = {
+	title = magocracy_arcane_archives_decree_decision
+	desc = magocracy_arcane_archives_decree_decision_desc
+	selection_tooltip = magocracy_arcane_archives_decree_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_tale.dds"
+	}
+
+	sort_order = 10
+	decision_group_type = republic_decree
+	is_invisible = yes # Shown in the Republic window
+
+	cooldown = { years = 10 }
+
+	cost = {
+		treasury_or_gold = { value = total_republic_decree_gold_cost }
+	}
+
+	is_shown = {
+		government_has_flag = government_is_magocracy
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = you_are_republic_leader_desc
+			magocracy_is_conclave_head_trigger = yes
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		add_character_modifier = {
+			modifier = magocracy_arcane_archives_modifier
+			years = 10
+		}
+		capital_county ?= {
+			add_county_modifier = {
+				modifier = magocracy_arcane_archives_county_modifier
+				years = 10
+			}
+		}
+		magocracy_list_realm_mages_effect = yes
+		every_in_list = {
+			list = magocracy_realm_mages
+			custom = magocracy_every_realm_mage
+			add_trait_xp = {
+				trait = zz_magister
+				track = secrets_of_the_higher_mysteries
+				value = 5
+			}
+		}
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_enacted_decree_effect = yes
+	}
+
+	requires_approve = { magocracy_decree_requires_approval_trigger = yes }
+
+	ai_approval = {
+		value = 0
+		if = { # Pledged supporters only show their pledge
+			limit = {
+				liege ?= {
+					this != root
+					is_target_in_variable_list = {
+						name = decree_approvers
+						target = root
+					}
+				}
+			}
+			add = {
+				value = 100
+				desc = decree_pledged_support_desc
+			}
+		}
+		else = {
+			add = republic_assembly_preparation_approval_value
+			add = republic_caucus_room_approval_value
+			if = {
+				limit = { has_trait = zz_magister }
+				add = {
+					value = 10
+					desc = magocracy_decree_mage_voter_desc
+				}
+			}
+		}
+	}
+
+	ai_check_interval = 120
+
+	ai_potential = {
+		this = liege
+	}
+
+	ai_will_do = {
+		base = 10
+	}
+}

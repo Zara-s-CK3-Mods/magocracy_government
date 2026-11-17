@@ -1,0 +1,22 @@
+﻿### Magocracy Families
+#
+# The Magocracy's noble families: like vanilla's merchant families, they live in their own domicile
+# (the Mage's Commune) and may own trade posts. Created by magocracy_give_family_title_effect, which also
+# marks the title with the magocracy_family_title variable (script has no title type trigger).
+title_type_magocracy_family = {
+	prefix = magocracy
+	landless = yes
+	house_title = yes
+	domicile_type = mages_commune
+	trade_post = yes
+
+	properties = {
+		definite_form = yes
+		landless = yes
+		ruler_uses_title_name = no
+		always_follows_primary_heir = yes
+		no_automatic_claims = yes
+		noble_family = yes
+		destroy_if_invalid_heir = yes
+	}
+}

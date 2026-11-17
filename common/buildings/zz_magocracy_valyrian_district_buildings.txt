@@ -1,0 +1,183 @@
+﻿# Valyrian District: the Valyrian Spires (primary building) and the Freehold's Valyrian buildings.
+# Each is raised by its great project (zz_magocracy_valyrian_projects.txt).
+
+magocracy_valyrian_spires_01 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_02
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 3
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_3
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_02 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_03
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_4
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_03 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_04
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_5
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_04 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_05
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_6
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_05 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_06
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_7
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_06 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_07
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_8
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_07 = {
+	type_icon = "zz_vayrian_spires.dds"
+	next_building = magocracy_valyrian_spires_08
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_9
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_spires_08 = {
+	type_icon = "zz_vayrian_spires.dds"
+	great_project_type = magocracy_construct_valyrian_spires_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		building_slots_for_host_district = 2
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_10
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+
+magocracy_valyrian_roads_01 = {
+	type_icon = "zz_vayrian_roads.dds"
+	next_building = magocracy_valyrian_roads_02
+	great_project_type = magocracy_construct_valyrian_roads_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_3
+	}
+	county_holding_modifier = {
+		holding = city_holding
+		income_mult = 0.1
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+magocracy_valyrian_roads_02 = {
+	type_icon = "zz_vayrian_roads.dds"
+	great_project_type = magocracy_construct_valyrian_roads_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		monthly_civic_tax = magocracy_valyrian_building_tax_tier_3
+	}
+	county_holding_modifier = {
+		holding = city_holding
+		income_mult = 0.2
+	}
+
+	ai_value = {
+		base = 100
+	}
+}
+magocracy_valyrian_walls_01 = {
+	type_icon = "special_buildings/aurelian_walls.dds"
+	great_project_type = magocracy_construct_valyrian_walls_project
+	construction_time = slow_construction_time
+
+	province_modifier = {
+		generic_tax_mult = 0.3
+		fort_level = 4
+	}
+	county_holding_modifier = {
+		holding = city_holding
+		income_mult = 0.2
+	}
+
+	ai_value = {
+		base = 100
+	}
+}

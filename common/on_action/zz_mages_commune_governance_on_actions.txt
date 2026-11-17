@@ -1,0 +1,127 @@
+﻿# Mage's Commune version of the Public Land governance mission (ep3_public_land only looks at estates)
+spawn_admin_governance_contract_on_action = {
+	random_on_action = {
+		100 = mages_commune_public_land
+	}
+}
+
+mages_commune_public_land = {
+	trigger = {
+		NOT = { has_character_flag = task_contract_cooldown_public_land }
+		any_sub_realm_county = {
+			any_county_province = {
+				any_province_domicile = {
+					owner = scope:governor
+					domicile_is_mages_commune_trigger = yes
+				}
+			}
+		}
+		OR = {
+			any_sub_realm_county = {
+				any_county_province = {
+					has_holding = yes
+					province_owner != scope:governor
+					has_holding_type = castle_holding
+				}
+			}
+			any_sub_realm_county = {
+				any_county_province = {
+					any_province_domicile = {
+						domicile_is_mages_commune_trigger = yes
+						owner = {
+							this != scope:governor
+							is_ai = yes
+							is_alive = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	effect = {
+		# Select a suitable location
+		random_sub_realm_county = {
+			limit = {
+				any_county_province = {
+					any_province_domicile = {
+						domicile_is_mages_commune_trigger = yes
+						owner = {
+							this != scope:governor
+							is_ai = yes
+							is_alive = yes
+						}
+					}
+				}
+			}
+			random_county_province = {
+				limit = {
+					any_province_domicile = {
+						domicile_is_mages_commune_trigger = yes
+						owner = {
+							this != scope:governor
+							is_ai = yes
+							is_alive = yes
+						}
+					}
+
+				}
+				save_scope_as = target_province
+			}
+			scope:target_province ?= {
+				random_province_domicile = {
+					limit = {
+						domicile_is_mages_commune_trigger = yes
+						owner = {
+							this != scope:governor
+							is_ai = yes
+							is_alive = yes
+						}
+					}
+					owner = { save_scope_as = employer }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = scope:target_province }
+			}
+			random_sub_realm_county = {
+				limit = {
+					any_county_province = {
+						has_holding = yes
+						province_owner != scope:governor
+						has_holding_type = castle_holding
+					}
+				}
+				random_county_province = {
+					limit = {
+						has_holding = yes
+						province_owner != scope:governor
+						has_holding_type = castle_holding
+					}
+					save_scope_as = target_province
+					province_owner = { save_scope_as = employer }
+				}
+			}
+		}
+		
+		# Create the contract
+		create_task_contract = {
+			task_contract_type = public_land
+			task_contract_tier = scope:governance_task_contract_tier
+			location = scope:target_province
+			task_contract_employer = scope:employer
+			save_scope_as = new_governance_issue
+		}
+		
+		# Set a cooldown
+		add_character_flag = {
+			flag = task_contract_cooldown_public_land
+			years = 10
+		}
+		
+		# General post-creation set up
+		manage_new_governance_contract_effect = yes
+	}
+}

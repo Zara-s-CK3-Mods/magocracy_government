@@ -1,0 +1,223 @@
+﻿# Magocracy: Bountiful Harvest also counts a Mage's Commune granary. Override of admin_contracts.txt - keep in sync.
+
+bountiful_harvest = {
+	group = admin_governance_group
+	icon = "gfx/interface/icons/message_feed/a_catch_all_councillor_icon.dds"
+
+	valid_to_create = {
+		valid_governor_contract_trigger = yes
+		sub_realm_size > 1
+	}
+
+	valid_to_keep = {
+		task_contract_taker = { valid_governor_contract_trigger = yes }
+		valid_governor_contract_basic_trigger = yes
+	}
+
+	valid_to_accept = {
+		valid_governor_contract_trigger = yes
+		custom_tooltip = {
+			text = has_active_governance_issue
+			num_taken_task_contracts < 1
+		}
+		is_available = yes
+	}
+
+	valid_to_continue = {
+		task_contract_taker = {
+			valid_governor_contract_trigger = yes
+		}
+	}
+
+	on_accepted = {
+		task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_accept_contract" }
+		save_scope_as = task_contract
+		task_contract_taker ?= {
+			root.task_contract_location.barony = {
+				save_scope_as = task_contract_location
+			}
+			trigger_event = governor_contract_event.1020
+		}
+	}
+
+	on_completed = {
+	}
+
+	on_invalidated = {
+		if = {
+			limit = { governor_contract_invalidated_message_trigger = yes }
+			task_contract_taker ?= {
+				save_scope_as = task_contract_character
+				send_interface_message = {
+					type = event_generic_bad_with_text
+					title = admin_contract_invalidated_title
+					left_icon = scope:task_contract_character
+					desc = admin_contract_invalidated_desc
+				}
+			}
+		}
+	}
+
+	task_contract_reward = {
+		success = {
+			effect = {
+				custom_tooltip = admin_contract_success_tt_rewards
+			}
+		}
+		harvest_governor = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					change_influence = {
+						value = medium_influence_gain
+						multiply = governance_task_contract_tier_value
+					}
+					every_sub_realm_county = {
+						add_county_modifier = {
+							modifier = ep3_governance_harvest
+							years = 10
+						}
+					}
+					if = { # Gain some extra Governor trait exp
+						limit = { has_trait = governor }
+						increase_governance_effect = { VALUE = 6 }
+					}
+					add_merit_if_relevant_effect = {
+						MERIT = minor_merit_value
+					}
+				}
+			}
+		}
+		harvest_distribute = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					every_sub_realm_county = {
+						change_prosperity_progress_with_overflow = 10
+					}
+					if = { # Gain some extra Governor trait exp
+						limit = { has_trait = governor }
+						increase_governance_effect = { VALUE = 6 }
+					}
+					add_merit_if_relevant_effect = {
+						MERIT = minor_merit_value
+					}
+				}
+			}
+		}
+		harvest_capital = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					add_prestige = {
+						value = minor_prestige_gain
+						multiply = governance_task_contract_tier_value
+					}
+					add_merit_if_relevant_effect = {
+						MERIT = minor_merit_value
+					}
+				}
+				task_contract_location.county = {
+					add_county_modifier = {
+						modifier = ep3_governance_great_harvest
+						years = 10
+					}
+					change_prosperity_progress_with_overflow = 10
+				}
+			}
+		}
+		harvest_charity = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					add_piety = {
+						value = medium_piety_gain
+						multiply = governance_task_contract_tier_value
+					}
+				}
+			}
+		}
+		harvest_sell_excess = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					add_gold = {
+						value = scope:task_contract.task_contract_location.total_monthly_tax_income
+						multiply = 10
+						multiply = governance_task_contract_tier_value
+						round = yes
+						min = 2
+					}
+					increase_governance_effect = { VALUE = 2 }
+					add_merit_if_relevant_effect = {
+						MERIT = minor_merit_value
+					}
+				}
+				task_contract_location.county = {
+					change_prosperity_progress_with_overflow = 5
+				}
+			}
+		}
+		harvest_claim_it_yourself = {
+			visible = no
+			effect = {
+				task_contract_taker = { play_sound_effect = "event:/DLC/EP3/SFX/UI/Contracts/ep3_ui_contracts_success_on_contract" }
+				save_scope_as = task_contract
+				task_contract_taker ?= {
+					add_gold = {
+						value = scope:task_contract.task_contract_location.total_monthly_tax_income
+						multiply = 25
+						multiply = governance_task_contract_tier_value
+						
+						if = {
+							limit = {
+								domicile ?= { OR = { has_domicile_building_or_higher = storage_granary_03 has_domicile_building_or_higher = mages_commune_storage_granary_03 } }
+							}
+							multiply = {
+								value = 1
+								add = estate_granary_gold_bonus_value
+							}
+						}
+						round = yes
+						min = 5
+					}
+					if = {
+						limit = {
+							domicile ?= { OR = { has_domicile_building_or_higher = storage_granary_03 has_domicile_building_or_higher = mages_commune_storage_granary_03 } }
+						}
+						custom_tooltip = harvest_claim_it_yourself_estate_tt
+					}
+					increase_governance_effect = { VALUE = -2 }
+					add_merit_if_relevant_effect = {
+						MERIT = minor_merit_loss
+					}
+					if = {
+						limit = {
+							secret_siphoned_treasury_is_valid_trigger = {
+								OWNER = scope:task_contract.task_contract_taker
+								TARGET = top_liege
+							}
+						}
+						add_secret = {
+							type = secret_siphoned_treasury
+							target = top_liege
+						}
+					}
+				}
+				task_contract_location.county = {
+					change_county_control = -5
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,13 @@
+﻿## Vanilla override (common/scripted_triggers/00_law_triggers.txt)
+# Unchanged except that Magocracy governors use magocracy_appointment_succession_law instead.
+
+can_have_appointment_succession_law_trigger = {
+	has_ep3_dlc_trigger = yes
+	government_has_mechanic = administrative
+	NOR = {
+		government_has_flag = government_has_merit
+		government_has_flag = government_is_japan_administrative
+		government_has_flag = government_is_magocracy # SOTHM Magocracy
+	}
+	is_independent_ruler = no
+}

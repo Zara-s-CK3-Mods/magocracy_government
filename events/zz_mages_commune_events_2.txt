@@ -1,0 +1,3439 @@
+﻿namespace = mages_commune_events_2
+
+
+# Mage's Commune versions of the vanilla estate events. Each fires only when the vanilla event would not.
+
+
+scripted_effect mages_commune_find_coup_interlocutor_effect = {
+	random_list = {
+		1 = {
+			trigger = { exists = cp:councillor_chancellor }
+			cp:councillor_chancellor = { save_scope_as = interlocutor }
+		}
+		1 = {
+			trigger = { exists = court_position:chief_eunuch_court_position }
+			court_position:chief_eunuch_court_position = { save_scope_as = interlocutor }
+		}
+		1 = {
+			trigger = { exists = cp:councillor_steward }
+			cp:councillor_steward = { save_scope_as = interlocutor }
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:interlocutor } }
+		ordered_courtier = {
+			order_by = intrigue
+			save_scope_as = interlocutor
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:interlocutor } }
+		ordered_pool_character = {
+			province = root.location
+			order_by = intrigue
+			save_scope_as = interlocutor
+		}
+	}
+}
+
+# Mage's Commune version of grand_ambitions.0120
+mages_commune_events_2.1 = {
+	type = character_event
+	title = mages_commune_events_2.1.t
+	desc = mages_commune_events_2.1.desc
+	theme = administrative
+	override_background = { reference = estate }
+
+	left_portrait = {
+		character = root
+		animation = survey
+	}
+	right_portrait = {
+		character = scope:interlocutor
+		animation = debating
+	}
+
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		has_domicile = yes
+		domicile = {
+			is_domicile_type = estate
+			num_domicile_buildings < 6
+		}
+		OR = {
+			number_maa_regiments_of_base_type:skirmishers > 0
+			number_maa_regiments_of_base_type:heavy_infantry > 0
+			number_maa_regiments_of_base_type:pikemen > 0
+			number_maa_regiments_of_base_type:light_cavalry > 0
+			number_maa_regiments_of_base_type:heavy_cavalry > 0
+			number_maa_regiments_of_base_type:archers > 0
+		}
+	}
+
+		has_domicile = yes
+		domicile = {
+			is_domicile_type = mages_commune
+			num_domicile_buildings < 6
+		}
+		OR = {
+			number_maa_regiments_of_base_type:skirmishers > 0
+			number_maa_regiments_of_base_type:heavy_infantry > 0
+			number_maa_regiments_of_base_type:pikemen > 0
+			number_maa_regiments_of_base_type:light_cavalry > 0
+			number_maa_regiments_of_base_type:heavy_cavalry > 0
+			number_maa_regiments_of_base_type:archers > 0
+		}
+	}
+
+	immediate = {
+		mages_commune_find_coup_interlocutor_effect = yes
+		domicile = { save_scope_as = estate }
+		# Pick the best building for the MaA type they have the most of
+		random_list = {
+			0 = { # Barracks for Skirmishers, Heavy Infantry, and Spearmen
+				trigger = {
+					NOT = {
+						domicile = { has_domicile_building = mages_commune_barracks_06 }
+					}
+				}
+				modifier = {
+					add = number_maa_regiments_of_base_type:skirmishers
+					add = number_maa_regiments_of_base_type:heavy_infantry
+					add = number_maa_regiments_of_base_type:pikemen
+				}
+				save_scope_value_as = {
+					name = estate_building
+					value = flag:barracks
+				}
+				random_maa_regiment = {
+					limit = {
+						OR = {
+							is_unit_type = skirmishers
+							is_unit_type = heavy_infantry
+							is_unit_type = pikemen
+						}
+					}
+					save_scope_as = maa_flavor
+				}
+			}
+			0 = { # Pasteurs for Cavalry
+				trigger = {
+					NOT = {
+						domicile = { has_domicile_building = mages_commune_grazing_land_06 }
+					}
+				}
+				modifier = {
+					add = number_maa_regiments_of_base_type:light_cavalry
+					add = number_maa_regiments_of_base_type:heavy_cavalry
+				}
+				save_scope_value_as = {
+					name = estate_building
+					value = flag:grazing_land
+				}
+				random_maa_regiment = {
+					limit = {
+						OR = {
+							is_unit_type = light_cavalry
+							is_unit_type = heavy_cavalry
+						}
+					}
+					save_scope_as = maa_flavor
+				}
+			}
+			0 = { # Watchtower for Archers
+				trigger = {
+					NOT = {
+						domicile = { has_domicile_building = mages_commune_watchtower_06 }
+					}
+				}
+				modifier = {
+					add = number_maa_regiments_of_base_type:archers
+				}
+				save_scope_value_as = {
+					name = estate_building
+					value = flag:watchtower
+				}
+				random_maa_regiment = {
+					limit = { is_unit_type = archers }
+					save_scope_as = maa_flavor
+				}
+			}
+		}
+	}
+
+	option = { # Construct Barracks
+		name = mages_commune_events_2.1.a
+		trigger = {
+			scope:estate_building ?= flag:barracks
+			number_maa_regiments_of_base_type:pikemen >=1
+		}
+		# Build or upgrade barracks building
+		domicile = {
+			if = {
+				limit = { has_domicile_building_or_higher = mages_commune_barracks_01 }
+				switch = {
+					trigger = has_domicile_building
+					mages_commune_barracks_01 = { add_domicile_building = mages_commune_barracks_02 }
+					mages_commune_barracks_02 = { add_domicile_building = mages_commune_barracks_03 }
+					mages_commune_barracks_03 = { add_domicile_building = mages_commune_barracks_04 }
+					mages_commune_barracks_04 = { add_domicile_building = mages_commune_barracks_05 }
+					mages_commune_barracks_05 = { add_domicile_building = mages_commune_barracks_06 }
+				}
+			}
+			else = {
+				add_domicile_building = mages_commune_barracks_01
+			}
+		}
+	}
+
+	option = { # Construct Pasteur
+		name = mages_commune_events_2.1.b
+		trigger = { scope:estate_building ?= flag:grazing_land }
+		# Build or upgrade pasteurs building
+		domicile = {
+			if = {
+				limit = { has_domicile_building_or_higher = mages_commune_grazing_land_01 }
+				switch = {
+					trigger = has_domicile_building
+					mages_commune_grazing_land_01 = { add_domicile_building = mages_commune_grazing_land_02 }
+					mages_commune_grazing_land_02 = { add_domicile_building = mages_commune_grazing_land_03 }
+					mages_commune_grazing_land_03 = { add_domicile_building = mages_commune_grazing_land_04 }
+					mages_commune_grazing_land_04 = { add_domicile_building = mages_commune_grazing_land_05 }
+					mages_commune_grazing_land_05 = { add_domicile_building = mages_commune_grazing_land_06 }
+				}
+			}
+			else = {
+				add_domicile_building = mages_commune_grazing_land_01
+			}
+		}
+	}
+
+	option = { # Construct Watchtower
+		name = mages_commune_events_2.1.c
+		trigger = { scope:estate_building ?= flag:watchtower }
+		# Build or upgrade watchtower building
+		domicile = {
+			if = {
+				limit = { has_domicile_building_or_higher = mages_commune_watchtower_01 }
+				switch = {
+					trigger = has_domicile_building
+					mages_commune_watchtower_01 = { add_domicile_building = mages_commune_watchtower_02 }
+					mages_commune_watchtower_02 = { add_domicile_building = mages_commune_watchtower_03 }
+					mages_commune_watchtower_03 = { add_domicile_building = mages_commune_watchtower_04 }
+					mages_commune_watchtower_04 = { add_domicile_building = mages_commune_watchtower_05 }
+					mages_commune_watchtower_05 = { add_domicile_building = mages_commune_watchtower_06 }
+				}
+			}
+			else = {
+				add_domicile_building = mages_commune_watchtower_01
+			}
+		}
+	}
+
+	option = { # Fallback Estate Upgrade
+		name = mages_commune_events_2.1.d
+		remove_short_term_gold = medium_gold_value
+		add_character_modifier = {
+			modifier = ep3_grand_ambitions_local_labor_modifier
+			years = 10
+		}
+	}
+}
+
+# Mage's Commune version of ep3_powerful_families.8040
+mages_commune_events_2.2 = {
+	type = character_event
+	title = mages_commune_events_2.2.t
+	desc = mages_commune_events_2.2.desc
+	theme = administrative
+	left_portrait = {
+		character = root
+		animation = thinking
+	}
+	right_portrait = {
+		character = scope:other_family
+		animation = personality_honorable
+	}
+	cooldown = { years = 15 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		domicile ?= {
+			is_domicile_type = estate
+			trigger_if = {
+				limit = {
+					root = { top_liege != this }
+				}
+				domicile_location.county.holder.liege != root
+			}
+			domicile_location.county.holder.house.house_head = {
+				this != root
+				exists = house
+				house != root.house
+				house = {
+					is_powerful_family = yes
+				}
+				is_available_ai_adult = yes
+			}
+		}
+	}
+
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		domicile ?= {
+			is_domicile_type = mages_commune
+			trigger_if = {
+				limit = {
+					root = { top_liege != this }
+				}
+				domicile_location.county.holder.liege != root
+			}
+			domicile_location.county.holder.house.house_head = {
+				this != root
+				exists = house
+				house != root.house
+				house = {
+					is_powerful_family = yes
+				}
+				is_available_ai_adult = yes
+			}
+		}
+	}
+
+	immediate = {
+		domicile ?= {
+			domicile_location.county = {
+				save_scope_as = location
+				holder.house.house_head = {
+					save_scope_as = other_family
+				}
+			}
+		}
+	}
+
+	# Have them over for a good dinner
+	option = {
+		name = mages_commune_events_2.2.a
+		change_influence = minor_influence_loss
+		duel = {
+			skill = diplomacy
+			target = scope:other_family
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.2.a.win
+					left_icon = root
+					right_icon = scope:other_family
+					scope:other_family = {
+						progress_towards_friend_effect = {
+							REASON = friend_dinner
+							CHARACTER = root
+							OPINION = default_friend_opinion
+						}
+					}
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.2.a.lose
+					left_icon = root
+					right_icon = scope:other_family
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			ambitious = minor_stress_impact_gain
+			shy = minor_stress_impact_gain
+			vengeful = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			opinion_modifier = {
+				opinion_target = scope:other_family
+				multiplier = 0.1
+			}
+			ai_value_modifier = {
+				ai_sociability = 1.5
+				ai_rationality = 1.5
+				ai_boldness = -1.5
+				ai_vengefulness = -1.5
+			}
+		}
+	}
+
+	# Spread your influence in their lands
+	option = {
+		name = mages_commune_events_2.2.b
+		scope:other_family = {
+			progress_towards_rival_effect = {
+				REASON = rival_plotting_against_me
+				CHARACTER = root
+				OPINION = default_rival_opinion
+			}
+		}
+		duel = {
+			skills = { intrigue stewardship }
+			target = scope:other_family
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.2.b.win
+					left_icon = root
+					right_icon = scope:other_family
+					change_influence = medium_influence_gain
+					scope:other_family = {
+						change_influence = minor_influence_loss
+					}
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.2.b.lose
+					left_icon = root
+					right_icon = scope:other_family
+					change_influence = medium_influence_loss
+					scope:other_family = {
+						change_influence = minor_influence_gain
+					}
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			compassionate = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+			content = minor_stress_impact_gain
+			honest = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_honor = -1.5
+				ai_rationality = -1.5
+				ai_boldness = 1.5
+				ai_vengefulness = 1.5
+			}
+		}
+	}
+
+	# Keep a low profile
+	option = {
+		name = mages_commune_events_2.2.c
+		stress_and_fulfillment_impact = {
+			ambitious = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_sociability = -1.5
+				ai_boldness = -2
+				ai_vengefulness = -1.5
+			}
+		}
+	}
+}
+
+# Mage's Commune version of ep3_powerful_families.8060
+mages_commune_events_2.3 = {
+	type = character_event
+	title = mages_commune_events_2.3.t
+	desc = mages_commune_events_2.3.desc
+	theme = administrative
+	left_portrait = {
+		character = root
+		animation = rage
+	}
+	right_portrait = {
+		character = scope:other_family
+		animation = schadenfreude
+	}
+	cooldown = { years = 15 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		any_relation = {
+			type = rival
+			top_liege = root.top_liege
+			exists = house
+			house != root.house
+			house = {
+				is_powerful_family = yes
+			}
+			is_available_ai_adult = yes
+			domicile ?= {
+				is_domicile_type = estate
+				domicile_location.county.holder = root
+			}
+		}
+	}
+
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		any_relation = {
+			type = rival
+			top_liege = root.top_liege
+			exists = house
+			house != root.house
+			house = {
+				is_powerful_family = yes
+			}
+			is_available_ai_adult = yes
+			domicile ?= {
+				is_domicile_type = mages_commune
+				domicile_location.county.holder = root
+			}
+		}
+	}
+
+	immediate = {
+		random_relation = {
+			type = rival
+			limit = {
+				top_liege = root.top_liege
+				exists = house
+				house != root.house
+				house = {
+					is_powerful_family = yes
+				}
+				is_available_ai_adult = yes
+				domicile ?= {
+					is_domicile_type = mages_commune
+					domicile_location.county.holder = root
+				}
+			}
+			domicile.domicile_location.county = { save_scope_as = location }
+			save_scope_as = other_family
+		}
+	}
+
+	# Try to steal their stuff!
+	option = {
+		name = mages_commune_events_2.3.a
+		scope:other_family = {
+			progress_towards_rival_effect = {
+				REASON = rival_plotting_against_me
+				CHARACTER = root
+				OPINION = default_rival_opinion
+			}
+		}
+		duel = {
+			skill = intrigue
+			target = scope:other_family
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.3.a.win
+					left_icon = root
+					right_icon = scope:other_family
+					scope:other_family = {
+						pay_short_term_gold = {
+							target = root
+							gold = medium_gold_value
+						}
+					}
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 1.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.3.a.lose
+					left_icon = root
+					right_icon = scope:other_family
+					scope:other_family = {
+						pay_short_term_gold = {
+							target = root
+							gold = medium_gold_value
+						}
+						add_opinion = {
+							modifier = theft_opinion
+							target = root
+						}
+					}
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.3.a.lose
+					left_icon = root
+					right_icon = scope:other_family
+					scope:other_family = {
+						add_opinion = {
+							modifier = theft_opinion
+							target = root
+						}
+					}
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			content = minor_stress_impact_gain
+			honest = minor_stress_impact_gain
+			compassionate = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			opinion_modifier = {
+				opinion_target = scope:other_family
+				multiplier = 0.1
+			}
+			ai_value_modifier = {
+				ai_honor = -1.5
+				ai_boldness = 1.5
+				ai_vengefulness = 3.5
+				ai_greed = 1.5
+			}
+		}
+	}
+
+	# Bribe their servants
+	option = {
+		name = mages_commune_events_2.3.b
+		remove_short_term_gold = minor_gold_value
+		change_influence = minor_influence_gain
+		stress_and_fulfillment_impact = {
+			compassionate = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+			content = minor_stress_impact_gain
+			honest = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 0
+				short_term_gold <= minor_gold_value
+			}
+			ai_value_modifier = {
+				ai_rationality = 1.5
+				ai_boldness = 1.5
+				ai_vengefulness = -1.5
+				ai_greed = -1.5
+			}
+		}
+	}
+
+	# Nah nah nah
+	option = {
+		name = mages_commune_events_2.3.c
+		stress_and_fulfillment_impact = {
+			ambitious = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -1.5
+				ai_boldness = -2
+				ai_vengefulness = -1.5
+			}
+		}
+	}
+}
+
+# Mage's Commune version of ep3_powerful_families.8070
+mages_commune_events_2.4 = {
+	type = character_event
+	title = mages_commune_events_2.4.t
+	desc = mages_commune_events_2.4.desc
+	theme = administrative
+	left_portrait = {
+		character = root
+		animation = rage
+	}
+	right_portrait = {
+		character = scope:child
+		animation = fear
+	}
+	lower_right_portrait = {
+		character = scope:other_family
+	}
+	cooldown = { years = 15 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		exists = domicile
+		house = {
+			any_house_member = {
+				top_liege = root.top_liege
+				is_available_ai = yes
+				is_adult = no
+				child_not_infant_trigger = yes # Should generally only be teens
+			}
+		}
+		top_liege = {
+			any_powerful_family = {
+				this != root.house
+				house_head = {
+					is_available_ai_adult = yes
+					domicile ?= {
+						is_domicile_type = estate
+						domicile_location.county = root.domicile.domicile_location.county
+					}
+					save_temporary_scope_as = house_head_temp
+					OR = {
+						has_relation_rival = root
+						root = {
+							house_has_feud_relation_with_trigger = { TARGET = scope:house_head_temp }
+						}
+					}
+				}
+			}
+		}
+	}
+
+		government_has_mechanic = administrative
+		government_allows = noble_families
+		is_available = yes
+		house ?= {
+			is_powerful_family = yes
+		}
+		exists = domicile
+		house = {
+			any_house_member = {
+				top_liege = root.top_liege
+				is_available_ai = yes
+				is_adult = no
+				child_not_infant_trigger = yes # Should generally only be teens
+			}
+		}
+		top_liege = {
+			any_powerful_family = {
+				this != root.house
+				house_head = {
+					is_available_ai_adult = yes
+					domicile ?= {
+						is_domicile_type = mages_commune
+						domicile_location.county = root.domicile.domicile_location.county
+					}
+					save_temporary_scope_as = house_head_temp
+					OR = {
+						has_relation_rival = root
+						root = {
+							house_has_feud_relation_with_trigger = { TARGET = scope:house_head_temp }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		house = {
+			random_house_member = {
+				limit = {
+					top_liege = root.top_liege
+					is_available_ai = yes
+					is_adult = no
+					child_not_infant_trigger = yes
+				}
+				save_scope_as = child
+			}
+		}
+		top_liege = {
+			random_powerful_family = {
+				limit = {
+					this != root.house
+					house_head = {
+						is_available_ai_adult = yes
+						domicile ?= {
+							is_domicile_type = mages_commune
+							domicile_location.county = root.domicile.domicile_location.county
+						}
+						save_temporary_scope_as = house_head_temp
+						OR = {
+							has_relation_rival = root
+							root = {
+								house_has_feud_relation_with_trigger = { TARGET = scope:house_head_temp }
+							}
+						}
+					}
+				}
+				house_head = { save_scope_as = other_family }
+			}
+		}
+	}
+
+	# Convince them to give you info on the family
+	option = {
+		name = mages_commune_events_2.4.a
+		duel = {
+			skills = { intrigue diplomacy }
+			target = scope:child
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.4.a.win
+					left_icon = root
+					right_icon = scope:child
+					scope:other_family = {
+						change_influence = medium_influence_loss
+					}
+					change_influence = medium_influence_gain
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -1.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.4.a.lose
+					left_icon = root
+					right_icon = scope:child
+					scope:other_family = {
+						progress_towards_rival_effect = {
+							REASON = rival_plotting_against_me
+							CHARACTER = root
+							OPINION = default_rival_opinion
+						}
+					}
+				}
+			}
+			50 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = -49
+				}
+				send_interface_toast = {
+					title = mages_commune_events_2.4.a.lose
+					left_icon = root
+					right_icon = scope:child
+					scope:other_family = {
+						progress_towards_rival_effect = {
+							REASON = rival_plotting_against_me
+							CHARACTER = root
+							OPINION = default_rival_opinion
+						}
+					}
+					scope:other_family = {
+						change_influence = medium_influence_gain
+					}
+					change_influence = minor_influence_loss
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			content = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+			forgiving = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			opinion_modifier = {
+				opinion_target = scope:other_family
+				multiplier = -0.1
+			}
+			ai_value_modifier = {
+				ai_honor = -1.5
+				ai_boldness = 1.5
+				ai_vengefulness = 3.5
+				ai_greed = 1.5
+			}
+		}
+	}
+
+	# Try to leverage them to break the rivalry
+	option = {
+		name = mages_commune_events_2.4.b
+		scope:child = {
+			duel = {
+				skill = diplomacy
+				target = scope:other_family
+				15 = { # Crit success, rivalry is gone
+					compare_modifier = {
+						value = scope:duel_value
+						multiplier = 3.5
+						min = -49
+					}
+					root = {
+						send_interface_toast = {
+							title = mages_commune_events_2.4.b.crit_win
+							left_icon = root
+							right_icon = scope:child
+							upgrade_to_friend_effect = {
+								CHARACTER = scope:other_family
+								REASON = friend_making_ammends
+							}
+						}
+					}
+				}
+				50 = {
+					compare_modifier = {
+						value = scope:duel_value
+						multiplier = 3.5
+						min = -49
+					}
+					send_interface_toast = {
+						title = mages_commune_events_2.4.b.win
+						left_icon = root
+						right_icon = scope:child
+						scope:other_family = {
+							progress_towards_friend_effect = {
+								REASON = friend_making_ammends
+								CHARACTER = root
+								OPINION = default_rival_opinion
+							}
+						}
+					}
+				}
+				50 = {
+					compare_modifier = {
+						value = scope:duel_value
+						multiplier = -3.5
+						min = -49
+					}
+					send_interface_toast = {
+						title = mages_commune_events_2.4.b.lose
+						left_icon = root
+						right_icon = scope:child
+						scope:other_family = {
+							progress_towards_rival_effect = {
+								REASON = rival_plotting_against_me
+								CHARACTER = root
+								OPINION = default_rival_opinion
+							}
+						}
+						scope:other_family = {
+							change_influence = medium_influence_gain
+						}
+						change_influence = minor_influence_loss
+					}
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			vengeful = medium_stress_impact_gain
+			callous = minor_stress_impact_gain
+			sadistic = minor_stress_impact_gain
+			stubborn = minor_stress_impact_gain
+			ambitious = minor_stress_impact_gain
+			arrogant = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			opinion_modifier = {
+				opinion_target = scope:other_family
+				multiplier = 0.1
+			}
+			ai_value_modifier = {
+				ai_compassion = 1.5
+				ai_rationality = 1.5
+				ai_vengefulness = -1.5
+			}
+		}
+	}
+
+	# Just let the kid do as the kid do
+	option = {
+		name = mages_commune_events_2.4.c
+		stress_and_fulfillment_impact = {
+			content = minor_stress_impact_loss
+			ambitious = minor_stress_impact_gain
+			gregarious = minor_stress_impact_gain
+			vengeful = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_boldness = -2
+			}
+		}
+	}
+}
+
+# Mage's Commune version of ep3_landless_admin.1010
+mages_commune_events_2.5 = {
+	type = character_event
+	title = mages_commune_events_2.5.t
+	desc = mages_commune_events_2.5.desc
+	theme = administrative
+	left_portrait = {
+		character = root
+		triggered_animation = {
+			trigger = {
+				has_trait = paranoid
+			}
+			animation = paranoia
+		}
+		triggered_animation = {
+			trigger = {
+				has_trait = arrogant
+			}
+			animation = laugh
+		}
+		animation = personality_content
+	}
+	right_portrait = {
+		character = scope:local
+		animation = admiration
+	}
+	lower_right_portrait = scope:child
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		government_has_mechanic = administrative
+		is_landed_or_landless_administrative_or_theocratic = yes
+		domicile ?= {
+			has_domicile_building_or_higher = estate_main_03
+		}
+		is_available = yes
+	}
+
+		government_has_mechanic = administrative
+		is_landed_or_landless_administrative_or_theocratic = yes
+		domicile ?= {
+			has_domicile_building_or_higher = mages_commune_merchant_company_main_03
+		}
+		is_available = yes
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			factor = 2
+			domicile ?= {
+				has_domicile_building_or_higher = mages_commune_merchant_company_main_05
+			}
+		}
+	}
+
+	immediate = {
+		domicile = { save_scope_as = my_estate }
+		if = {
+			limit = {
+				any_pool_character = {
+					province = root.location
+					is_available_healthy_ai_adult = yes
+					has_no_particular_noble_roots_trigger = yes
+					any_child = {
+						is_adult = no
+					}
+				}
+			}
+			random_pool_character = {
+				province = root.location
+				limit = {
+					is_available_healthy_ai_adult = yes
+					has_no_particular_noble_roots_trigger = yes
+					any_child = {
+						is_adult = no
+					}
+				}
+				save_scope_as = local
+				random_child = {
+					limit = { is_adult = no }
+					save_scope_as = child
+				}
+			}
+		}
+		else = {
+			create_character = {
+				template = generic_peasant_character
+				dynasty = none
+				location = root.location
+				faith = root.location.faith
+				rite = root.location.rite
+				culture = root.location.culture
+				save_scope_as = local
+			}
+			hidden_effect = {
+				scope:local = {
+					move_to_pool = yes
+				}
+			}
+			create_character = {
+				template = peasant_toddler_character
+				culture = root.culture
+				faith = root.faith
+				rite = root.rite
+				location = root.location
+				save_scope_as = child
+			}
+			if = { #Set the previous character as their parent
+				limit = {
+					scope:local ?= {
+						is_female = no
+					}
+				}
+				hidden_effect = {
+					scope:child = {
+						set_father = scope:local
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					scope:child = {
+						set_mother = scope:local
+					}
+				}
+			}
+		}
+	}
+
+	# Paranoid - they're clearly spying on me!
+	option = {
+		name = mages_commune_events_2.5.a
+		trigger = {
+			has_trait = paranoid
+		}
+		add_character_modifier = {
+			modifier = ep3_extra_security_modifier
+			years = 10
+		}
+		scope:local = {
+			add_opinion = {
+				target = root
+				modifier = confused_opinion
+				opinion = -20
+			}
+		}
+		stress_and_fulfillment_impact = {
+			paranoid = medium_stress_impact_loss
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 2
+				has_trait = paranoid
+			}
+		}
+	}
+
+	# Thanks friend, would you like to contribute?
+	option = {
+		name = mages_commune_events_2.5.b
+		add_character_modifier = {
+			modifier = ep3_good_estate_modifier
+			years = 10
+		}
+
+		stress_and_fulfillment_impact = {
+			greedy = medium_stress_impact_loss
+			generous = medium_stress_impact_gain
+			gregarious = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 2
+				has_trait = greedy
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					has_trait = generous
+					has_trait = gregarious
+				}
+			}
+		}
+	}
+
+	# Tell everyone pls
+	option = {
+		name = mages_commune_events_2.5.c
+		change_influence = minor_influence_gain
+
+		stress_and_fulfillment_impact = {
+			arrogant = medium_stress_impact_loss
+			ambitious = medium_stress_impact_loss
+			humble = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = 50
+				influence_level <= 2
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_trait = arrogant
+					has_trait = ambitious
+				}
+			}
+			modifier = {
+				factor = 0
+				has_trait = humble
+			}
+		}
+	}
+
+	# That's sick, do you wanna join me?
+	option = {
+		name = mages_commune_events_2.5.d
+		add_courtier = scope:local
+		add_courtier = scope:child
+		add_piety = miniscule_piety_gain
+		stress_and_fulfillment_impact = {
+			gregarious = medium_stress_impact_loss
+			generous = medium_stress_impact_loss
+			paranoid = major_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = 50
+				OR = {
+					has_trait = generous
+					has_trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					has_trait = paranoid
+					has_trait = callous
+				}
+			}
+		}
+	}
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_barracks_trigger = {
+	has_domicile_building_or_higher = mages_commune_barracks_01
+	NOT = { has_domicile_building_or_higher = mages_commune_barracks_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_barracks_05 }
+		root = { estate_can_construct_barracks_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_barracks_04 }
+		root = { estate_can_construct_barracks_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_barracks_03 }
+		root = { estate_can_construct_barracks_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_barracks_02 }
+		root = { estate_can_construct_barracks_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_barracks_trigger_estate = {
+	has_domicile_building_or_higher = barracks_01
+	NOT = { has_domicile_building_or_higher = barracks_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = barracks_05 }
+		root = { estate_can_construct_barracks_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = barracks_04 }
+		root = { estate_can_construct_barracks_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = barracks_03 }
+		root = { estate_can_construct_barracks_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = barracks_02 }
+		root = { estate_can_construct_barracks_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_garden_trigger = {
+	has_domicile_building_or_higher = mages_commune_garden_01
+	NOR = {
+		has_domicile_building_or_higher = mages_commune_garden_leisure_06
+		has_domicile_building_or_higher = mages_commune_garden_fruit_06
+	}
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_leisure_05 }
+		root = { estate_can_construct_garden_leisure_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_leisure_04 }
+		root = { estate_can_construct_garden_leisure_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_03 }
+		root = { estate_can_construct_garden_leisure_04_trigger = yes }
+	}
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_fruit_05 }
+		root = { estate_can_construct_garden_fruit_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_fruit_04 }
+		root = { estate_can_construct_garden_fruit_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_garden_03 }
+		root = { estate_can_construct_garden_fruit_04_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_garden_trigger_estate = {
+	has_domicile_building_or_higher = garden_01
+	NOR = {
+		has_domicile_building_or_higher = garden_leisure_06
+		has_domicile_building_or_higher = garden_fruit_06
+	}
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = garden_leisure_05 }
+		root = { estate_can_construct_garden_leisure_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = garden_leisure_04 }
+		root = { estate_can_construct_garden_leisure_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = garden_03 }
+		root = { estate_can_construct_garden_leisure_04_trigger = yes }
+	}
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = garden_fruit_05 }
+		root = { estate_can_construct_garden_fruit_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = garden_fruit_04 }
+		root = { estate_can_construct_garden_fruit_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = garden_03 }
+		root = { estate_can_construct_garden_fruit_04_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_guardhouse_trigger = {
+	has_domicile_building_or_higher = mages_commune_guardhouse_01
+	NOT = { has_domicile_building_or_higher = mages_commune_guardhouse_04 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_guardhouse_03 }
+		root = { estate_can_construct_guardhouse_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_guardhouse_02 }
+		root = { estate_can_construct_guardhouse_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_guardhouse_trigger_estate = {
+	has_domicile_building_or_higher = guardhouse_01
+	NOT = { has_domicile_building_or_higher = guardhouse_04 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = guardhouse_03 }
+		root = { estate_can_construct_guardhouse_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = guardhouse_02 }
+		root = { estate_can_construct_guardhouse_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_market_trigger = {
+	has_domicile_building_or_higher = mages_commune_market_01
+	NOT = { has_domicile_building_or_higher = mages_commune_market_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_market_05 }
+		root = { estate_can_construct_market_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_market_04 }
+		root = { estate_can_construct_market_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_market_03 }
+		root = { estate_can_construct_market_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_market_02 }
+		root = { estate_can_construct_market_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_market_trigger_estate = {
+	has_domicile_building_or_higher = market_01
+	NOT = { has_domicile_building_or_higher = market_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = market_05 }
+		root = { estate_can_construct_market_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = market_04 }
+		root = { estate_can_construct_market_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = market_03 }
+		root = { estate_can_construct_market_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = market_02 }
+		root = { estate_can_construct_market_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_olive_trigger = {
+	has_domicile_building_or_higher = mages_commune_olive_01
+	NOT = { has_domicile_building_or_higher = mages_commune_olive_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_olive_05 }
+		root = { estate_can_construct_olive_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_olive_04 }
+		root = { estate_can_construct_olive_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_olive_03 }
+		root = { estate_can_construct_olive_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_olive_02 }
+		root = { estate_can_construct_olive_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_olive_trigger_estate = {
+	has_domicile_building_or_higher = olive_01
+	NOT = { has_domicile_building_or_higher = olive_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = olive_05 }
+		root = { estate_can_construct_olive_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = olive_04 }
+		root = { estate_can_construct_olive_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = olive_03 }
+		root = { estate_can_construct_olive_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = olive_02 }
+		root = { estate_can_construct_olive_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_tea_trigger = {
+	has_domicile_building_or_higher = japanese_tea_plantation_01
+	NOT = { has_domicile_building_or_higher = japanese_tea_plantation_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_05 }
+		root = { estate_can_construct_japanese_tea_plantation_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_04 }
+		root = { estate_can_construct_japanese_tea_plantation_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_03 }
+		root = { estate_can_construct_japanese_tea_plantation_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_02 }
+		root = { estate_can_construct_japanese_tea_plantation_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_tea_trigger_estate = {
+	has_domicile_building_or_higher = japanese_tea_plantation_01
+	NOT = { has_domicile_building_or_higher = japanese_tea_plantation_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_05 }
+		root = { estate_can_construct_japanese_tea_plantation_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_04 }
+		root = { estate_can_construct_japanese_tea_plantation_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_03 }
+		root = { estate_can_construct_japanese_tea_plantation_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = japanese_tea_plantation_02 }
+		root = { estate_can_construct_japanese_tea_plantation_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_vineyard_trigger = {
+	has_domicile_building_or_higher = mages_commune_vineyard_01
+	NOT = { has_domicile_building_or_higher = mages_commune_vineyard_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_vineyard_05 }
+		root = { estate_can_construct_vineyard_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_vineyard_04 }
+		root = { estate_can_construct_vineyard_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_vineyard_03 }
+		root = { estate_can_construct_vineyard_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_vineyard_02 }
+		root = { estate_can_construct_vineyard_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_vineyard_trigger_estate = {
+	has_domicile_building_or_higher = vineyard_01
+	NOT = { has_domicile_building_or_higher = vineyard_06 }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = vineyard_05 }
+		root = { estate_can_construct_vineyard_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = vineyard_04 }
+		root = { estate_can_construct_vineyard_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = vineyard_03 }
+		root = { estate_can_construct_vineyard_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = vineyard_02 }
+		root = { estate_can_construct_vineyard_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_workshop_trigger = {
+	has_domicile_building_or_higher = mages_commune_workshop_01
+	NOR = {
+		has_domicile_building_or_higher = mages_commune_workshop_carpenter_06
+		has_domicile_building_or_higher = mages_commune_workshop_mason_06
+	}
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_carpenter_05 }
+		root = { estate_can_construct_workshop_carpenter_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_carpenter_04 }
+		root = { estate_can_construct_workshop_carpenter_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_carpenter_03 }
+		root = { estate_can_construct_workshop_carpenter_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_02 }
+		root = { estate_can_construct_workshop_carpenter_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_mason_05 }
+		root = { estate_can_construct_workshop_mason_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_mason_04 }
+		root = { estate_can_construct_workshop_mason_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_mason_03 }
+		root = { estate_can_construct_workshop_mason_04_trigger = yes }
+	}
+	# No mages_commune_workshop_02 here, as we default to building a carpenter.
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_textile_05 }
+		root = { estate_can_construct_workshop_textile_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_textile_04 }
+		root = { estate_can_construct_workshop_textile_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = mages_commune_workshop_textile_03 }
+		root = { estate_can_construct_workshop_textile_04_trigger = yes }
+	}
+	# No mages_commune_workshop_02 here, as we default to building a carpenter.
+	trigger_else = { always = yes }
+}
+
+scripted_trigger mages_commune_ep3_landless_admin_1020_can_upgrade_workshop_trigger_estate = {
+	has_domicile_building_or_higher = workshop_01
+	NOR = {
+		has_domicile_building_or_higher = workshop_carpenter_06
+		has_domicile_building_or_higher = workshop_mason_06
+	}
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = workshop_carpenter_05 }
+		root = { estate_can_construct_workshop_carpenter_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_carpenter_04 }
+		root = { estate_can_construct_workshop_carpenter_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_carpenter_03 }
+		root = { estate_can_construct_workshop_carpenter_04_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_02 }
+		root = { estate_can_construct_workshop_carpenter_03_trigger = yes }
+	}
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = workshop_mason_05 }
+		root = { estate_can_construct_workshop_mason_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_mason_04 }
+		root = { estate_can_construct_workshop_mason_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_mason_03 }
+		root = { estate_can_construct_workshop_mason_04_trigger = yes }
+	}
+	# No workshop_02 here, as we default to building a carpenter.
+	trigger_else = { always = yes }
+	trigger_if = {
+		limit = { has_domicile_building_or_higher = workshop_textile_05 }
+		root = { estate_can_construct_workshop_textile_06_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_textile_04 }
+		root = { estate_can_construct_workshop_textile_05_trigger = yes }
+	}
+	trigger_else_if = {
+		limit = { has_domicile_building_or_higher = workshop_textile_03 }
+		root = { estate_can_construct_workshop_textile_04_trigger = yes }
+	}
+	# No workshop_02 here, as we default to building a carpenter.
+	trigger_else = { always = yes }
+}
+
+# Mage's Commune version of ep3_landless_admin.1020
+mages_commune_events_2.6 = {
+	type = character_event
+	title = mages_commune_events_2.6.t
+	desc = {
+		desc = mages_commune_events_2.6.desc.intro
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:market
+				}
+				desc = mages_commune_events_2.6.desc.market
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:garden
+				}
+				desc = mages_commune_events_2.6.desc.garden
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:guardhouse
+				}
+				desc = mages_commune_events_2.6.desc.guardhouse
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:workshop
+				}
+				desc = mages_commune_events_2.6.desc.workshop
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:barracks
+				}
+				desc = mages_commune_events_2.6.desc.barracks
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:vineyard
+				}
+				desc = mages_commune_events_2.6.desc.vineyard
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:olive
+				}
+				desc = mages_commune_events_2.6.desc.olive
+			}
+			triggered_desc = {
+				trigger = {
+					var:domicile_building = flag:tea
+				}
+				desc = mages_commune_events_2.6.desc.tea
+			}
+		}
+		desc = mages_commune_events_2.6.desc.outro
+	}
+	theme = administrative
+	left_portrait = {
+		character = root
+		triggered_animation = {
+			trigger = {
+				has_trait = callous
+			}
+			animation = dismissal
+		}
+		animation = happiness
+	}
+	right_portrait = {
+		character = scope:steward
+		animation = steward
+	}
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		government_has_mechanic = administrative
+		is_landed_or_landless_administrative_or_theocratic = yes
+		is_available = yes
+		# I'm sorry
+		## ^Original source of shame removed on charges of [redacted]. The Council disapproves of such... lacking hygiene.
+		domicile ?= {
+			OR = {
+				mages_commune_ep3_landless_admin_1020_can_upgrade_market_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_garden_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_guardhouse_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_workshop_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_barracks_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_vineyard_trigger_estate = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_olive_trigger_estate = yes
+			}
+		}
+		domicile = {
+			has_ongoing_domicile_construction = no
+		}
+	}
+
+		government_has_mechanic = administrative
+		is_landed_or_landless_administrative_or_theocratic = yes
+		is_available = yes
+		# I'm sorry
+		## ^Original source of shame removed on charges of [redacted]. The Council disapproves of such... lacking hygiene.
+		domicile ?= {
+			OR = {
+				mages_commune_ep3_landless_admin_1020_can_upgrade_market_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_garden_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_guardhouse_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_workshop_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_barracks_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_vineyard_trigger = yes
+				mages_commune_ep3_landless_admin_1020_can_upgrade_olive_trigger = yes
+			}
+		}
+		domicile = {
+			has_ongoing_domicile_construction = no
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			factor = 2
+			NOT = {
+				any_courtier = {
+					has_any_high_skill_rating = yes
+					count < 3
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_market_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:market
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_garden_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:garden
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_guardhouse_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:guardhouse
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_workshop_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:workshop
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_barracks_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:barracks
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_vineyard_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:vineyard
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_olive_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:olive
+				}
+			}
+			1 = {
+				trigger = {
+					domicile = { mages_commune_ep3_landless_admin_1020_can_upgrade_tea_trigger = yes }
+				}
+				set_variable = {
+					name = domicile_building
+					value = flag:tea
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = cp:councillor_steward
+			}
+			cp:councillor_steward = { save_scope_as = steward }
+		}
+		else_if = {
+			limit = {
+				any_courtier = {
+					is_available_healthy_ai_adult = yes
+					this != root
+				}
+			}
+			ordered_courtier = {
+				limit = {
+					is_available_healthy_ai_adult = yes
+					this != root
+				}
+				order_by = stewardship
+				save_scope_as = steward
+			}
+		}
+		else = {
+			create_character = {
+				template = stewardship_court_position_holder_template
+				gender_female_chance = root_faith_dominant_gender_adjusted_female_chance
+				dynasty = none
+				location = root.location
+				faith = root.location.faith
+				rite = root.location.rite
+				culture = root.location.culture
+				save_scope_as = steward
+			}
+		}
+		scope:steward = { assign_quirk_effect = yes }
+	}
+
+	# Market
+	option = {
+		name = mages_commune_events_2.6.a
+		trigger = { var:domicile_building = flag:market }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_market_01 = { add_domicile_building = mages_commune_market_02 }
+				mages_commune_market_02 = { add_domicile_building = mages_commune_market_03 }
+				mages_commune_market_03 = { add_domicile_building = mages_commune_market_04 }
+				mages_commune_market_04 = { add_domicile_building = mages_commune_market_05 }
+				mages_commune_market_05 = { add_domicile_building = mages_commune_market_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			greedy = medium_stress_impact_gain
+			avaricious = medium_stress_impact_gain
+			arrogant = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				OR = {
+					has_trait = greedy
+					has_trait = avaricious
+					has_trait = arrogant
+				}
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Garden
+	option = {
+		name = mages_commune_events_2.6.b
+		trigger = { var:domicile_building = flag:garden }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_garden_01 = { add_domicile_building = mages_commune_garden_02 }
+				mages_commune_garden_02 = { add_domicile_building = mages_commune_garden_03 }
+				mages_commune_garden_03 = { add_domicile_building = mages_commune_garden_leisure_04 }
+				mages_commune_garden_leisure_04 = { add_domicile_building = mages_commune_garden_leisure_05 }
+				mages_commune_garden_leisure_05 = { add_domicile_building = mages_commune_garden_leisure_06 }
+				mages_commune_garden_fruit_04 = { add_domicile_building = mages_commune_garden_fruit_05 }
+				mages_commune_garden_fruit_05 = { add_domicile_building = mages_commune_garden_fruit_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			greedy = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -25
+				has_trait = greedy
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Guardhouse
+	option = {
+		name = mages_commune_events_2.6.c
+		trigger = { var:domicile_building = flag:guardhouse }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_guardhouse_01 = { add_domicile_building = mages_commune_guardhouse_02 }
+				mages_commune_guardhouse_02 = { add_domicile_building = mages_commune_guardhouse_03 }
+				mages_commune_guardhouse_03 = { add_domicile_building = mages_commune_guardhouse_04 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Workshop
+	option = {
+		name = mages_commune_events_2.6.d
+		trigger = { var:domicile_building = flag:workshop }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_workshop_01 = { add_domicile_building = mages_commune_workshop_02 }
+				mages_commune_workshop_02 = { add_domicile_building = mages_commune_workshop_carpenter_03 }
+				mages_commune_workshop_carpenter_03 = { add_domicile_building = mages_commune_workshop_carpenter_04 }
+				mages_commune_workshop_carpenter_04 = { add_domicile_building = mages_commune_workshop_carpenter_05 }
+				mages_commune_workshop_carpenter_05 = { add_domicile_building = mages_commune_workshop_carpenter_06 }
+				mages_commune_workshop_mason_03 = { add_domicile_building = mages_commune_workshop_mason_04 }
+				mages_commune_workshop_mason_04 = { add_domicile_building = mages_commune_workshop_mason_05 }
+				mages_commune_workshop_mason_05 = { add_domicile_building = mages_commune_workshop_mason_06 }
+				mages_commune_workshop_textile_03 = { add_domicile_building = mages_commune_workshop_textile_04 }
+				mages_commune_workshop_textile_04 = { add_domicile_building = mages_commune_workshop_textile_05 }
+				mages_commune_workshop_textile_05 = { add_domicile_building = mages_commune_workshop_textile_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Barracks
+	option = {
+		name = mages_commune_events_2.6.e
+		trigger = { var:domicile_building = flag:barracks }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_barracks_01 = { add_domicile_building = mages_commune_barracks_02 }
+				mages_commune_barracks_02 = { add_domicile_building = mages_commune_barracks_03 }
+				mages_commune_barracks_03 = { add_domicile_building = mages_commune_barracks_04 }
+				mages_commune_barracks_04 = { add_domicile_building = mages_commune_barracks_05 }
+				mages_commune_barracks_05 = { add_domicile_building = mages_commune_barracks_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Vineyard
+	option = {
+		name = mages_commune_events_2.6.f
+		trigger = { var:domicile_building = flag:vineyard }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_vineyard_01 = { add_domicile_building = mages_commune_vineyard_02 }
+				mages_commune_vineyard_02 = { add_domicile_building = mages_commune_vineyard_03 }
+				mages_commune_vineyard_03 = { add_domicile_building = mages_commune_vineyard_04 }
+				mages_commune_vineyard_04 = { add_domicile_building = mages_commune_vineyard_05 }
+				mages_commune_vineyard_05 = { add_domicile_building = mages_commune_vineyard_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# Olive
+	option = {
+		name = mages_commune_events_2.6.g
+		trigger = { var:domicile_building = flag:olive }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_olive_01 = { add_domicile_building = mages_commune_olive_02 }
+				mages_commune_olive_02 = { add_domicile_building = mages_commune_olive_03 }
+				mages_commune_olive_03 = { add_domicile_building = mages_commune_olive_04 }
+				mages_commune_olive_04 = { add_domicile_building = mages_commune_olive_05 }
+				mages_commune_olive_05 = { add_domicile_building = mages_commune_olive_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+
+
+	# Tea
+	option = {
+		name = ep3_landless_admin.1020.j
+		trigger = { var:domicile_building = flag:tea }
+		domicile = {
+			switch = {
+				trigger = has_domicile_building
+				mages_commune_olive_01 = { add_domicile_building = japanese_tea_plantation_02 }
+				mages_commune_olive_02 = { add_domicile_building = japanese_tea_plantation_03 }
+				mages_commune_olive_03 = { add_domicile_building = japanese_tea_plantation_04 }
+				mages_commune_olive_04 = { add_domicile_building = japanese_tea_plantation_05 }
+				mages_commune_olive_05 = { add_domicile_building = japanese_tea_plantation_06 }
+			}
+		}
+		remove_short_term_gold = major_gold_value
+		change_influence = medium_influence_loss
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -50
+				has_trait = generous
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+		}
+	}
+
+	# There's other stuff I want to build
+	option = {
+		name = mages_commune_events_2.6.h
+		flavor = mages_commune_events_2.6.h.flavor
+		add_gold = medium_gold_value
+
+		stress_and_fulfillment_impact = {
+			generous = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	after = { remove_variable = domicile_building }
+}
+
+# Mage's Commune version of ep3_emperor_yearly.2180
+mages_commune_events_2.7 = {
+	type = character_event
+	title = mages_commune_events_2.7.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					location = top_liege.capital_province
+				}
+				desc = mages_commune_events_2.7.desc_capital
+			}
+			desc = mages_commune_events_2.7.desc
+		}
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					top_liege = scope:event_host.top_liege
+				}
+				desc = mages_commune_events_2.7.desc_fellow
+			}
+			desc = mages_commune_events_2.7.desc_foreigner
+		}
+	}
+	theme = travel
+	left_portrait = {
+		character = root
+		animation = worry
+	}
+	lower_right_portrait = scope:event_host
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		is_available_travelling = yes
+		is_location_valid_for_travel_event_on_land = yes
+		involved_activity ?= {
+			has_activity_type = activity_pilgrimage
+		}
+		location = {
+			any_province_domicile = {
+				is_domicile_type = estate
+				owner ?= {
+					dynasty != root.dynasty
+					is_available = yes
+				}
+			}
+		}
+	}
+
+		is_available_travelling = yes
+		is_location_valid_for_travel_event_on_land = yes
+		involved_activity ?= {
+			has_activity_type = activity_pilgrimage
+		}
+		location = {
+			any_province_domicile = {
+				is_domicile_type = mages_commune
+				owner ?= {
+					dynasty != root.dynasty
+					is_available = yes
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			location = {
+				any_province_domicile = {
+					is_domicile_type = mages_commune
+					owner.religion = root.religion
+				}
+			}
+			add = 0.5
+		}
+		modifier = {
+			location = {
+				any_province_domicile = {
+					is_domicile_type = mages_commune
+					owner.faith = root.faith
+				}
+			}
+			add = 0.5
+		}
+	}
+
+	immediate = {
+		location = {
+			random_province_domicile = {
+				limit = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						dynasty != root.dynasty
+						is_available = yes
+						faith = root.faith
+					}
+				}
+				alternative_limit = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						dynasty != root.dynasty
+						is_available = yes
+						religion = root.religion
+					}
+				}
+				alternative_limit = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						dynasty != root.dynasty
+						is_available = yes
+					}
+				}
+				owner ?= {
+					save_scope_as = event_host
+				}
+			}
+			save_scope_as = location
+		}
+		#for the response event
+		root = { save_scope_as = pilgrim }
+	}
+
+	# Option A: let's approach the estate
+	option = {
+		name = mages_commune_events_2.7.a
+		flavor = mages_commune_events_2.7.a.tt
+		current_travel_plan = {
+			delay_travel_plan = {
+				days = 7
+			}
+		}
+		scope:event_host = {
+			trigger_event = {
+				id = ep3_emperor_yearly.2181
+				days = 1
+			}
+		}
+		stress_and_fulfillment_impact = {
+			shy = medium_stress_impact_gain
+			zealous = medium_stress_impact_gain
+			reclusive = major_stress_impact_gain
+			impatient = major_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			ai_value_modifier = {
+				ai_sociability = 1
+			}
+		}
+	}
+
+	# Option B: better make hurry instead
+	option = {
+		name = mages_commune_events_2.7.b
+		add_piety = minor_piety_gain
+		stress_and_fulfillment_impact = {
+			craven = minor_stress_impact_gain
+			gregarious = medium_stress_impact_gain
+			patient = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			ai_value_modifier = {
+				ai_zeal = 1
+			}
+		}
+	}
+}
+
+scripted_trigger mages_commune_ep3_2190_valid_domicile_owner_trigger = {
+	NOR = {
+		dynasty = root.dynasty
+		this = root
+	}
+	is_available_ai_adult = yes
+	opinion = {
+		target = root
+		value <= 20
+	}
+}
+
+scripted_trigger mages_commune_ep3_2190_valid_domicile_owner_trigger_estate = {
+	NOR = {
+		dynasty = root.dynasty
+		this = root
+	}
+	is_available_ai_adult = yes
+	opinion = {
+		target = root
+		value <= 20
+	}
+}
+
+# Mage's Commune version of ep3_emperor_yearly.2190
+mages_commune_events_2.8 = {
+	type = character_event
+	title = mages_commune_events_2.8.t
+	desc = mages_commune_events_2.8.desc
+	theme = administrative
+	override_background = { reference = ep3_relaxing_room }
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+	right_portrait = {
+		character = scope:landowner
+		animation = eyeroll
+	}
+	cooldown = { years = 15 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		OR = {
+			valid_for_byz_governor_content_trigger = yes
+			valid_for_byz_emperor_content_trigger = yes
+		}
+		capital_province = {
+			any_province_domicile = {
+				is_domicile_type = estate
+				owner ?= {
+					mages_commune_ep3_2190_valid_domicile_owner_trigger_estate = yes
+				}
+			}
+		}
+	}
+
+		OR = {
+			valid_for_byz_governor_content_trigger = yes
+			valid_for_byz_emperor_content_trigger = yes
+		}
+		capital_province = {
+			any_province_domicile = {
+				is_domicile_type = mages_commune
+				owner ?= {
+					mages_commune_ep3_2190_valid_domicile_owner_trigger = yes
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			capital_province = {
+				any_province_domicile = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						mages_commune_ep3_2190_valid_domicile_owner_trigger = yes
+						OR = {
+							has_trait = greedy
+							has_trait = deceitful
+							has_trait = arbitrary
+						}
+					}
+				}
+			}
+			add = 2
+		}
+		modifier = {
+			capital_province = {
+				any_province_domicile = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						mages_commune_ep3_2190_valid_domicile_owner_trigger = yes
+						OR = {
+							has_trait = generous
+							has_trait = humble
+							has_trait = honest
+							has_trait = just
+						}
+					}
+				}
+			}
+			factor = 0
+		}
+	}
+
+	immediate = {
+		capital_province = {
+			random_province_domicile = {
+				limit = {
+					is_domicile_type = mages_commune
+					owner ?= {
+						mages_commune_ep3_2190_valid_domicile_owner_trigger = yes
+					}
+				}
+				owner = {
+					save_scope_as = landowner
+				}
+			}
+			save_scope_as = capital
+		}
+		liege = { save_scope_as = liege }
+		save_scope_as = root_scope
+	}
+
+	# Option A: Make an example
+	option = {
+		name = mages_commune_events_2.8.a
+		if = {
+			limit = {
+				top_liege = this
+			}
+			every_vassal = {
+				limit = {
+					OR = {
+						has_vassal_stance = courtly
+						has_vassal_stance = parochial
+					}
+					this != scope:landowner
+				}
+				custom = every_courtly_parochial_vassal
+				add_opinion = {
+					target = root
+					modifier = targeting_nobility_opinion
+				}
+			}
+		}
+		else = {
+			add_character_modifier = {
+				modifier = ep3_emperor_yearly_2190_honest_modifier
+				years = 25
+			}
+			liege = {
+				every_vassal = {
+					limit = {
+						OR = {
+							has_vassal_stance = courtly
+							has_vassal_stance = parochial
+						}
+						NOR = {
+							this = scope:landowner
+							this = root
+						}
+					}
+					custom = every_courtly_parochial_fellow_vassal
+					add_opinion = {
+						target = root
+						modifier = targeting_nobility_opinion
+					}
+				}
+			}
+		}
+		capital_province.county = {
+			add_county_modifier = {
+				modifier = ep3_open_granary_county_modifier
+				years = 15
+			}
+		}
+		scope:landowner = {
+			change_influence = medium_influence_loss
+			remove_short_term_gold = medium_gold_value
+			add_opinion = {
+				target = root
+				modifier = ruined_me_opinion
+			}
+		}
+		stress_and_fulfillment_impact = {
+			greedy = medium_stress_impact_gain
+			content = medium_stress_impact_gain
+			arbitrary = medium_stress_impact_gain
+			craven = major_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			ai_value_modifier = {
+				ai_honor = 0.5
+				ai_sociability = -0.5
+			}
+			modifier = {
+				has_trait = brave
+				add = 25
+			}
+			modifier = {
+				has_trait = just
+				add = 25
+			}
+			modifier = {
+				has_trait = craven
+				add = -75
+			}
+			modifier = {
+				scope:landowner = {
+					gold < medium_gold_value
+				}
+				factor = 0
+			}
+		}
+	}
+
+	# Option B: get bribed
+	option = {
+		name = mages_commune_events_2.8.b
+		scope:landowner = {
+			pay_short_term_gold = {
+				target = root
+				gold = medium_gold_value
+			}
+			add_opinion = {
+				target = root
+				modifier = accepted_bribe_opinion
+				opinion = 20
+			}
+		}
+		change_influence = miniscule_influence_loss
+		stress_and_fulfillment_impact = {
+			honest = major_stress_impact_gain
+			just = major_stress_impact_gain
+			diligent = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			ai_value_modifier = {
+				ai_honor = -1
+				ai_greed = 0.5
+			}
+			modifier = {
+				has_trait = honest
+				factor = 0
+			}
+			modifier = {
+				has_trait = just
+				factor = 0
+			}
+			modifier = {
+				has_trait = diligent
+				add = -50
+			}
+			modifier = {
+				scope:landowner = {
+					gold < medium_gold_value
+				}
+				factor = 0
+			}
+		}
+	}
+
+	# Option C: wrist-slap - opt out
+	option = {
+		name = mages_commune_events_2.8.c
+		scope:landowner = {
+			add_opinion = {
+				target = root
+				modifier = off_the_hook_opinion
+				opinion = 5
+			}
+		}
+		stress_and_fulfillment_impact = {
+			just = minor_stress_impact_gain
+			honest = minor_stress_impact_gain
+			greedy = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 100
+			ai_value_modifier = {
+				ai_energy = -0.5
+			}
+		}
+	}
+}
+
+scripted_trigger mages_commune_ep3_governor_8020_estate_holder_trigger = {
+	this != root
+	is_ai = yes
+	domicile ?= {
+		is_domicile_type = mages_commune
+		OR = {
+			domicile_location.county.holder ?= root
+			domicile_location.county.holder.liege ?= root
+			domicile_location.county.holder.liege.liege ?= root
+		}
+		num_domicile_buildings >= 3
+	}
+	is_available_adult = yes
+	mages_commune_ep3_governor_involved_with_root_or_liege_trigger = no
+}
+
+scripted_trigger mages_commune_ep3_governor_8020_estate_holder_trigger_estate = {
+	this != root
+	is_ai = yes
+	domicile ?= {
+		is_domicile_type = estate
+		OR = {
+			domicile_location.county.holder ?= root
+			domicile_location.county.holder.liege ?= root
+			domicile_location.county.holder.liege.liege ?= root
+		}
+		num_domicile_buildings >= 3
+	}
+	is_available_adult = yes
+	mages_commune_ep3_governor_involved_with_root_or_liege_trigger_estate = no
+}
+
+scripted_effect mages_commune_ep3_governor_8020_fail_effect = {
+	send_interface_toast = {
+		type = event_toast_effect_bad
+		title = ep3_governor_yearly.8020.failure
+		right_icon = scope:estate_owner
+		
+		scope:estate_owner = { save_scope_as = recipient } # For loc reasons
+		custom_tooltip = {
+			text = raid_estate_destroy_buildings_tt
+			scope:other_estate = {
+				destroy_random_estate_building_variable_effect = yes
+				destroy_random_estate_building_effect = yes
+			}
+		}
+	}
+}
+
+scripted_trigger mages_commune_ep3_governor_involved_with_root_or_liege_trigger = {
+	OR = {
+		trigger_if = {
+			limit = { exists = house }
+			OR = {
+				root.house ?= house
+				root.top_liege.house ?= house
+			}
+		}
+		is_close_family_of = root
+		is_close_family_of = root.top_liege
+		is_consort_of = root
+		is_consort_of = root.top_liege
+		has_any_scripted_relation = root
+		has_any_scripted_relation = root.top_liege
+	}
+}
+
+scripted_trigger mages_commune_ep3_governor_involved_with_root_or_liege_trigger_estate = {
+	OR = {
+		trigger_if = {
+			limit = { exists = house }
+			OR = {
+				root.house ?= house
+				root.top_liege.house ?= house
+			}
+		}
+		is_close_family_of = root
+		is_close_family_of = root.top_liege
+		is_consort_of = root
+		is_consort_of = root.top_liege
+		has_any_scripted_relation = root
+		has_any_scripted_relation = root.top_liege
+	}
+}
+
+# Mage's Commune version of ep3_governor_yearly.8020
+mages_commune_events_2.9 = {
+	type = character_event
+	title = mages_commune_events_2.9.t
+	desc = {
+		desc = mages_commune_events_2.9.desc
+	}
+	theme = administrative
+	override_background = { reference = estate }
+	left_portrait = {
+		character = root
+		animation = schadenfreude
+	}
+	right_portrait = {
+		character = scope:estate_owner
+		animation = disapproval
+	}
+
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		has_ep3_dlc_trigger = yes
+		is_available_adult = yes
+		is_governor = yes
+		domicile ?= { is_domicile_type = estate }
+		top_liege = {
+			any_vassal_or_below = { mages_commune_ep3_governor_8020_estate_holder_trigger_estate = yes }
+		}
+	}
+
+		has_ep3_dlc_trigger = yes
+		is_available_adult = yes
+		is_governor = yes
+		domicile ?= { is_domicile_type = mages_commune }
+		top_liege = {
+			any_vassal_or_below = { mages_commune_ep3_governor_8020_estate_holder_trigger = yes }
+		}
+	}
+
+	immediate = {
+		domicile = { save_scope_as = my_estate }
+		top_liege = {
+			random_vassal_or_below = {
+				limit = { mages_commune_ep3_governor_8020_estate_holder_trigger = yes }
+				save_scope_as = estate_owner
+				domicile = { save_scope_as = other_estate }
+			}
+		}
+	}
+
+	option = { # Extort
+		name = mages_commune_events_2.9.a
+		flavor = mages_commune_events_2.9.reason
+		reverse_add_opinion = {
+			target = scope:estate_owner 
+			modifier = extorted_me_opinion
+			opinion = -20
+		}
+		save_scope_value_as = {
+			name = extort_chance
+			value = {
+				value = 0
+				add = {
+					value = scope:estate_owner.ai_greed
+					multiply = 0.25
+				}
+			}
+		}
+		save_scope_value_as = {
+			name = gold_value
+			value = {
+				value = 0
+				add = {
+					value = scope:estate_owner.minor_gold_value
+					multiply = root.stewardship
+					divide = 2
+				}
+			}
+		}
+		save_scope_as = extorted
+		duel = {
+			skill = stewardship
+			value = decent_skill_rating
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = 1
+				}
+				modifier = { add = scope:extort_chance }
+				modifier = {
+					scope:estate_owner.short_term_gold < scope:gold_value
+					factor = 0.1
+				}
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = mages_commune_events_2.9.success
+					right_icon = scope:estate_owner
+					scope:estate_owner = {
+						pay_short_term_gold = {
+							target = root
+							gold = scope:gold_value
+						}
+					}
+				}
+			}
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = 1
+				}
+				mages_commune_ep3_governor_8020_fail_effect = yes
+			}
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = 1
+				ai_boldness = 1
+				ai_honor = -2
+				ai_energy = 1
+			}
+		}
+	}
+
+	option = { # Favor
+		name = mages_commune_events_2.9.b
+		flavor = mages_commune_events_2.9.reason
+		reverse_add_opinion = {
+			target = scope:estate_owner 
+			modifier = extorted_me_opinion
+			opinion = -20
+		}
+		save_scope_as = extorted
+		save_scope_value_as = {
+			name = extort_chance
+			value = {
+				value = 50
+				add = {
+					value = scope:estate_owner.ai_honor
+					multiply = 0.25
+				}
+				max = 75
+				min = 25
+			}
+		}
+		duel = {
+			skill = intrigue
+			value = decent_skill_rating
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = 1
+				}
+				modifier = { add = scope:extort_chance }
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = mages_commune_events_2.9.success
+					right_icon = scope:estate_owner
+					add_hook = {
+						target = scope:estate_owner
+						type = obligation_hook
+					}
+				}
+			}
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = 1
+				}
+				mages_commune_ep3_governor_8020_fail_effect = yes
+			}
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = 1
+				ai_boldness = 1
+				ai_honor = -1
+			}
+		}
+	}
+
+	option = { # Good word
+		name = mages_commune_events_2.9.c
+		flavor = mages_commune_events_2.9.reason
+		reverse_add_opinion = {
+			target = scope:estate_owner 
+			modifier = extorted_me_opinion
+			opinion = -20
+		}
+		save_scope_as = extorted
+		save_scope_value_as = {
+			name = extort_chance
+			value = {
+				value = 50
+				add = {
+					value = scope:estate_owner.ai_energy
+					multiply = 0.25
+				}
+				max = 75
+				min = 25
+			}
+		}
+		save_scope_value_as = {
+			name = influence_value
+			value = {
+				value = minor_influence_gain
+				multiply = diplomacy
+				divide = 2
+			}
+		}
+		duel = {
+			skill = diplomacy
+			value = decent_skill_rating
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = 1
+				}
+				modifier = { add = scope:extort_chance }
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = mages_commune_events_2.9.success
+					right_icon = scope:estate_owner
+					change_influence = scope:influence_value
+					scope:estate_owner = { change_influence = minor_influence_loss }
+				}
+			}
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = 1
+				}
+				mages_commune_ep3_governor_8020_fail_effect = yes
+			}
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -1
+				ai_boldness = -1
+				ai_honor = 1
+			}
+		}
+	}
+
+	option = { # Friendly
+		name = mages_commune_events_2.9.d
+		reverse_add_opinion = {
+			target = scope:estate_owner 
+			modifier = friendliness_opinion
+			opinion = 15
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -1
+				ai_boldness = -1
+				ai_honor = 1
+			}
+		}
+	}
+}
+
+# Mage's Commune version of ep3_governor_yearly.8030
+mages_commune_events_2.10 = {
+	type = character_event
+	title = mages_commune_events_2.10.t
+	desc = {
+		desc = mages_commune_events_2.10.desc
+		random_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:estate = {
+						OR = {
+							has_domicile_building_or_higher = mages_commune_barracks_01
+							has_domicile_building_or_higher = mages_commune_watchtower_01
+							has_domicile_building_or_higher = mages_commune_guardhouse_01
+						}
+					}
+				}
+				desc = mages_commune_events_2.10.martial
+			}
+			triggered_desc = {
+				trigger = {
+					scope:estate = {
+						OR = {
+							has_domicile_building_or_higher = mages_commune_garden_01
+							has_domicile_building_or_higher = mages_commune_grazing_land_01
+							has_domicile_building_or_higher = mages_commune_grain_field_01
+							has_domicile_building_or_higher = mages_commune_vineyard_01
+							has_domicile_building_or_higher = mages_commune_olive_01
+						}
+					}
+				}
+				desc = mages_commune_events_2.10.agriculture
+			}
+			triggered_desc = {
+				trigger = {
+					scope:estate = {
+						OR = {
+							has_domicile_building_or_higher = mages_commune_market_01
+							has_domicile_building_or_higher = mages_commune_workshop_01
+							has_domicile_building_or_higher = mages_commune_guardhouse_01
+						}
+					}
+				}
+				desc = mages_commune_events_2.10.commerce
+			}
+			desc = mages_commune_events_2.10.fallback
+		}
+	}
+	theme = administrative
+	override_background = { reference = estate }
+	left_portrait = {
+		character = root
+		animation = admiration
+	}
+
+	cooldown = { years = 10 }
+
+	trigger = {
+		# Only where the vanilla event would not fire
+		NOT = {
+		is_available_adult = yes
+		is_governor = yes
+		domicile ?= {
+			is_domicile_type = estate
+			num_domicile_buildings >= 3
+			domicile_location.county = {
+				OR = {
+					holder = root
+					holder = { is_vassal_of = root }
+				}
+			}
+		}
+		NOT = {
+			any_sub_realm_county = {	
+				OR = {
+					has_county_modifier = ep3_governor_yearly_8030_stifled_modifier
+					has_county_modifier = ep3_governor_yearly_8030_benign_modifier
+				}
+			}
+		}
+	}
+
+		is_available_adult = yes
+		is_governor = yes
+		domicile ?= {
+			is_domicile_type = mages_commune
+			num_domicile_buildings >= 3
+			domicile_location.county = {
+				OR = {
+					holder = root
+					holder = { is_vassal_of = root }
+				}
+			}
+		}
+		NOT = {
+			any_sub_realm_county = {	
+				OR = {
+					has_county_modifier = ep3_governor_yearly_8030_stifled_modifier
+					has_county_modifier = ep3_governor_yearly_8030_benign_modifier
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			add = {
+				value = governor_efficiency
+				divide = 100
+			}
+		}
+	}
+
+	immediate = {
+		domicile = { save_scope_as = estate }
+	}
+
+	option = { # Tax it
+		name = mages_commune_events_2.10.a
+		add_treasury_or_gold = medium_treasury_or_gold_value
+		stress_and_fulfillment_impact = {
+			generous = minor_stress_impact_gain
+			compassionate = minor_stress_impact_gain
+			just = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = 1
+				ai_boldness = 0.5
+			}
+		}
+	}
+
+	option = { # Encourage it
+		name = mages_commune_events_2.10.b
+		increase_governance_effect = { VALUE = 5 }
+		add_character_modifier = {
+			modifier = ep3_governor_yearly_8030_benign_char_modifier
+			years = 10
+		}
+		scope:estate.domicile_location.county = {
+			add_county_modifier = {
+				modifier = ep3_governor_yearly_8030_benign_modifier
+				years = 10
+			}
+		}
+		stress_and_fulfillment_impact = {
+			greedy = medium_stress_impact_gain
+			callous = minor_stress_impact_gain
+			arrogant = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -1
+				ai_compassion = 0.5
+			}
+		}
+	}
+
+	option = { # Leave it
+		name = mages_commune_events_2.10.c
+		stress_and_fulfillment_impact = {
+			diligent = minor_stress_impact_gain
+			greedy = minor_stress_impact_gain
+			arbitrary = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -0.5
+				ai_energy = -1
+			}
+		}
+	}
+}
+
+scripted_trigger mages_commune_ep3_governor_yearly_8040_complainant_trigger = {
+	is_available_adult = yes
+	is_ai = yes
+	highest_held_title_tier <= tier_county
+	mages_commune_ep3_governor_involved_with_root_or_liege_trigger = no
+	capital_county.duchy = root.domicile.domicile_location.duchy
+}
+
+# Mage's Commune version of ep3_governor_yearly.8040
+mages_commune_events_2.11 = {
+	type = character_event
+	title = mages_commune_events_2.11.t
+	desc = mages_commune_events_2.11.desc
+	theme = administrative
+	override_background = { reference = relaxing_room }
+	left_portrait = {
+		character = root
+		animation = boredom
+	}
+	right_portrait = {
+		character = scope:complainant
+		animation = debating
+	}
+
+	cooldown = { years = 10 }
+
+	trigger = {
+		# The vanilla event (ep3_governor_yearly.8040) needs an estate; this one a Mage's Commune
+		is_available_adult = yes
+		is_governor = yes
+		domicile ?= {
+			is_domicile_type = mages_commune
+			num_domicile_buildings >= 3
+		}
+		any_vassal_or_below = { mages_commune_ep3_governor_yearly_8040_complainant_trigger = yes }
+		NOT = {
+			any_sub_realm_county = {	
+				OR = {
+					has_county_modifier = ep3_governor_yearly_8030_stifled_modifier
+					has_county_modifier = ep3_governor_yearly_8030_benign_modifier
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			add = {
+				value = governor_efficiency
+				divide = 100
+				multiply = -1
+			}
+		}
+	}
+
+	immediate = {
+		domicile = { save_scope_as = estate }
+		random_vassal_or_below = {
+			limit = { mages_commune_ep3_governor_yearly_8040_complainant_trigger = yes }
+			weight = {
+				base = 1
+				modifier = {
+					add = 1
+					OR = {
+						government_has_flag = government_is_republic
+						government_has_flag = government_is_merchant	
+					}
+					
+				}
+				modifier = {
+					add = -1
+					OR = {
+						government_has_flag = government_is_feudal
+						government_has_flag = government_is_clan
+					}
+				}
+				modifier = {
+					add = -2
+					government_has_flag = government_is_theocracy
+				}
+				modifier = {
+					add = 10
+					liege ?= root
+				}
+			}
+			save_scope_as = complainant
+		}
+	}
+
+	option = { # Focus on province
+		name = mages_commune_events_2.11.a
+		increase_governance_effect = { VALUE = 5 }
+		add_character_modifier = {
+			modifier = ep3_governor_yearly_8040_province_prosperity_modifier
+			years = 10
+		}
+		reverse_add_opinion = {
+			target = scope:complainant
+			modifier = respect_opinion
+			opinion = 15
+		}
+		stress_and_fulfillment_impact = {
+			greedy = minor_stress_impact_gain
+			lazy = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_energy = 1
+				ai_greed = -1
+			}
+		}
+	}
+
+	option = { # Focus on estate
+		name = mages_commune_events_2.11.b
+		add_character_modifier = {
+			modifier = ep3_governor_yearly_8040_domicile_prosperity_modifier
+			years = 10
+		}
+		reverse_add_opinion = {
+			target = scope:complainant
+			modifier = annoyed_opinion
+			opinion = -15
+		}
+		stress_and_fulfillment_impact = {
+			generous = minor_stress_impact_gain
+			diligent = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_energy = 1
+				ai_greed = -1
+			}
+		}
+	}
+
+	option = { # Try to do both
+		name = mages_commune_events_2.11.d
+		duel = {
+			skill = stewardship
+			value = decent_skill_rating
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = 3.5
+					min = 1
+				}
+				desc = mages_commune_events_2.11.d.success
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = mages_commune_events_2.11.d.success
+					add_character_modifier = {
+						modifier = ep3_governor_yearly_8040_across_things_modifier
+						years = 10
+					}
+					reverse_add_opinion = {
+						target = scope:complainant
+						modifier = impressed_opinion
+						opinion = 15
+					}
+				}
+			}
+			10 = {
+				compare_modifier = {
+					value = scope:duel_value
+					multiplier = -3.5
+					min = 1
+				}
+				desc = mages_commune_events_2.11.d.failure
+				send_interface_toast = {
+					type = event_toast_effect_bad
+					title = mages_commune_events_2.11.d.failure
+					add_character_modifier = {
+						modifier = ep3_governor_yearly_8040_overwhelmed_modifier
+						years = 10
+					}
+				}
+			}
+		}
+		stress_and_fulfillment_impact = {
+			base = minor_stress_impact_gain
+			humble = minor_stress_impact_gain
+			calm = minor_stress_impact_gain
+			lazy = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = -0.5
+				ai_energy = -1
+			}
+		}
+	}
+
+	option = { # Defer
+		name = mages_commune_events_2.11.c
+		reverse_add_opinion = {
+			target = scope:complainant
+			modifier = angry_opinion
+			opinion = -30
+		}
+		add_character_modifier = {
+			modifier = ep3_governor_yearly_8040_shirker_modifier
+			years = 5
+		}
+		stress_and_fulfillment_impact = {
+			compassionate = minor_stress_impact_gain
+			just = minor_stress_impact_gain
+		}
+		ai_chance = {
+			base = 10
+			ai_value_modifier = {
+				ai_greed = 1
+				ai_compassion = -0.5
+				ai_honor = -0.5
+			}
+		}
+	}
+}

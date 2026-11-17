@@ -1,0 +1,132 @@
+﻿# Magocracy: Mage's Communes move under the estate rules. Override of 00_rules.txt - keep in sync.
+
+can_move_domicile = {
+	trigger_if = {
+		limit = { exists = county } #This will exclude sea provinces, impassable provinces, river provinces, etc
+		save_temporary_scope_as = province_temp
+		scope:owner.domicile ?= {
+			# Estate
+			trigger_if = {
+				limit = {
+					OR = { # Magocracy: the Mage's Commune follows the estate rules
+						domicile_is_estate_trigger = yes
+						domicile_is_mages_commune_trigger = yes
+					}
+				}
+				# Cannot move estate outside top_liege realm
+				scope:province_temp.county.holder.top_liege ?= {
+					custom_tooltip = {
+						text = can_move_domicile_estate_realm_tt
+						this = scope:owner.top_liege
+					}
+				}
+				# Cannot move estate during war impacting location or destination
+				custom_tooltip = {
+					text = can_move_domicile_estate_war_tt
+					scope:owner.domicile.domicile_location.county.holder ?= {
+						NOR = {
+							is_at_war = yes
+							any_liege_or_above = { is_at_war = yes }
+						}
+					}
+					scope:province_temp.county.holder ?= {
+						NOR = {
+							is_at_war = yes
+							any_liege_or_above = { is_at_war = yes }
+						}
+					}
+				}
+				# Cannot move estate to its current location
+				custom_tooltip = {
+					text = can_move_domicile_estate_same_location_tt
+					scope:owner.domicile.domicile_location != scope:province_temp
+				}
+			}
+			# Camp
+			trigger_if = {
+				limit = { is_domicile_type = camp }
+				# Cannot move domicile to places you've been exiled from.
+				custom_tooltip = {
+					text = can_move_domicile_camp_exile.tt
+					NOT = {
+						is_laamp_exiled_from_province_trigger = {
+							PROVINCE = scope:province_temp
+							LAAMP = scope:owner
+						}
+					}
+				}
+				scope:owner = { is_available = yes }
+			}
+			# Company or Republic
+			trigger_if = {
+				limit = {
+					is_domicile_type = merchant_company
+				}
+				trigger_if = {
+					limit = {
+						scope:owner = {
+							government_has_flag = government_is_republic
+						}
+					}
+					trigger_if = {
+						limit = {
+							scope:owner = { is_independent_ruler = no }
+							scope:owner.liege = {
+								gdp_is_assembly_head_trigger = yes
+							}
+						}
+						custom_tooltip = {
+							text = can_move_domicile_estate_republic_tt
+							root = scope:owner.liege.capital_province
+						}
+					}
+					trigger_else_if = {
+						limit = {
+							scope:owner = {
+								gdp_is_assembly_head_trigger = yes
+							}
+						}
+						custom_tooltip = {
+							text = can_move_domicile_estate_republic_tt
+							root = scope:owner.capital_county.title_province
+						}
+					}
+					trigger_else = {
+						custom_tooltip = {
+							text = can_move_domicile_estate_republic_tt
+							always = no
+						}
+					}
+				}
+				trigger_if = {
+					limit = {
+						scope:owner = { government_has_flag = government_is_merchant }
+					}
+					custom_tooltip = {
+						text = can_move_domicile_company_market_capital_tt
+						scope:province_temp = { gdp_is_market_capital_province_trigger = yes }
+					}
+					custom_tooltip = {
+						text = can_move_domicile_company_range_tt
+						scope:province_temp = {
+							squared_distance = {
+								target = scope:owner.domicile.domicile_location
+								value <= scope:owner.merchant_company_move_range_value
+							}
+						}
+					}
+				}
+				# Cannot move estate to its current location
+				custom_tooltip = {
+					text = can_move_domicile_consortery_same_location_tt
+					scope:owner.domicile.domicile_location != scope:province_temp
+				}
+				scope:owner = {
+					has_raised_armies = no
+					is_available = yes
+				}
+			}
+		}
+	}
+	trigger_else = { exists = county } #This will exclude sea provinces, impassable provinces, river provinces, etc
+}

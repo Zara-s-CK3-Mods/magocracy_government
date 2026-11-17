@@ -1,0 +1,66 @@
+# Magocracy decrees
+
+magocracy_arcane_study_modifier = {
+	icon = learning_positive
+	trait_track_secrets_of_the_higher_mysteries_xp_gain_mult = 0.25
+	monthly_learning_lifestyle_xp_gain_mult = 0.1
+}
+
+magocracy_ward_capital_modifier = {
+	icon = martial_positive
+	fort_level = 2
+	defender_holding_advantage = 10
+	garrison_size = 0.5
+}
+
+magocracy_ward_capital_county_modifier = {
+	icon = county_modifier_prosperity_positive
+	epidemic_resistance = 20
+}
+
+magocracy_rite_of_plenty_modifier = {
+	icon = county_modifier_opinion_positive
+	prosperity_growth_factor = 0.2
+	popular_opinion_add = 5
+}
+
+magocracy_war_mages_modifier = {
+	icon = martial_positive
+	advantage = 5
+	enemy_hard_casualty_modifier = 0.1
+	men_at_arms_maintenance = -0.25
+}
+
+magocracy_proscriber_modifier = {
+	icon = piety_positive
+	monthly_piety_gain_mult = 0.1
+	clergy_opinion = 10
+}
+
+magocracy_blood_arts_proscribed_modifier = {
+	icon = magic_negative
+	trait_track_blood_magic_xp_gain_mult = -0.5
+}
+
+magocracy_sanctioner_modifier = {
+	icon = dread_positive
+	dread_baseline_add = 10
+	dread_gain_mult = 0.2
+	clergy_opinion = -10
+}
+
+magocracy_blood_arts_sanctioned_modifier = {
+	icon = magic_positive
+	trait_track_blood_magic_xp_gain_mult = 0.25
+}
+
+magocracy_arcane_archives_modifier = {
+	icon = learning_positive
+	learning = 2
+	monthly_learning_lifestyle_xp_gain_mult = 0.15
+}
+
+magocracy_arcane_archives_county_modifier = {
+	icon = county_modifier_prosperity_positive
+	prosperity_growth_factor = 0.15
+}

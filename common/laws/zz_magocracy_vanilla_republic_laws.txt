@@ -1,0 +1,203 @@
+﻿## Vanilla overrides (common/laws/04_republic_laws.txt)
+# Unchanged except that can_keep also accepts the Conclave's constitutional law, so a Magocracy can hold these laws.
+# Keep in sync with the vanilla file when the game updates.
+
+republic_war_declaration_1_limited = {
+	law_group_type = republic_war_declaration
+	index = 0
+
+	flag = republic_war_approval_required
+
+	modifier = {
+		character_capital_popular_opinion_add = 5
+	}
+
+	can_keep = {
+		trigger_if = {
+			limit = {
+				gdp_is_assembly_head_trigger = no
+			}
+			liege ?= {
+				has_realm_law = republic_war_declaration_1_limited
+			}
+		}
+		OR = {
+			has_realm_law = republic_assembly_authority_constitutional
+			has_realm_law = magocracy_conclave_authority_constitutional # Magocracy: the Conclave of Magisters
+		}
+	}
+	
+	can_pass = {
+		gdp_can_pass_republic_law_trigger = yes
+	}
+	
+	pass_cost = {
+		prestige = total_republic_law_prestige_cost
+		treasury_or_gold = total_republic_law_gold_cost
+	}
+	
+	on_pass = {
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_spend_pledged_law_approvers_effect = yes
+		capital_county = { add_popular_opinion = 10 }
+	}
+	
+	requires_approve = { gdp_requires_assembly_approval_trigger = yes }
+	
+	ai_approval = {
+		if = {
+			limit = { scope:proposer ?= root }
+			value = ai_law_approval_self_proposer_value
+		}
+		else = {
+			value = ai_law_approval_title_revocation_1_value
+			add = ai_law_approval_republic_base_value
+		}
+	}
+	
+	ai_will_do = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					ai_has_economical_boom_personality = yes
+					ai_has_cautious_personality = yes
+				}
+			}
+			add = 1
+		}
+		# Grace period
+		multiply = ai_law_grace_period_value
+	}
+}
+
+republic_banishment_2_permitted_by_decree = {
+	law_group_type = republic_banishment
+	index = 1
+
+	flag = republic_banishment_approval_required
+
+	can_keep = {
+		trigger_if = {
+			limit = {
+				gdp_is_assembly_head_trigger = no
+			}
+			liege ?= {
+				has_realm_law = republic_banishment_2_permitted_by_decree
+			}
+		}
+		OR = {
+			has_realm_law = republic_assembly_authority_constitutional
+			has_realm_law = magocracy_conclave_authority_constitutional # Magocracy: the Conclave of Magisters
+		}
+	}
+
+	can_pass = {
+		gdp_can_pass_republic_law_trigger = yes
+	}
+
+	pass_cost = {
+		prestige = total_republic_law_prestige_cost
+		treasury_or_gold = total_republic_law_gold_cost
+	}
+
+	on_pass = {
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_spend_pledged_law_approvers_effect = yes
+	}
+
+	requires_approve = { gdp_requires_assembly_approval_trigger = yes }
+
+	ai_approval = {
+		if = {
+			limit = { scope:proposer ?= root }
+			value = ai_law_approval_self_proposer_value
+		}
+		else = {
+			value = ai_law_approval_banishment_2_value
+			add = ai_law_approval_republic_base_value
+		}
+	}
+
+	ai_will_do = {
+		value = 0
+		if = {
+			limit = {
+				NOT = { gdp_is_republican_despot_or_supporter_trigger = yes }
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				gdp_character_in_democratic_republic_trigger = yes
+			}
+			add = 1
+		}
+		# Grace period
+		multiply = ai_law_grace_period_value
+	}
+}
+
+republic_execution_2_permitted_by_decree = {
+	law_group_type = republic_execution
+	index = 1
+
+	flag = republic_execution_approval_required
+
+	can_keep = {
+		trigger_if = {
+			limit = {
+				gdp_is_assembly_head_trigger = no
+			}
+			liege ?= {
+				has_realm_law = republic_execution_2_permitted_by_decree
+			}
+		}
+		OR = {
+			has_realm_law = republic_assembly_authority_constitutional
+			has_realm_law = magocracy_conclave_authority_constitutional # Magocracy: the Conclave of Magisters
+		}
+	}
+
+	can_pass = {
+		gdp_can_pass_republic_law_trigger = yes
+	}
+
+	pass_cost = {
+		prestige = total_republic_law_prestige_cost
+		treasury_or_gold = total_republic_law_gold_cost
+	}
+
+	on_pass = {
+		gdp_consume_republic_assembly_preparation_effect = yes
+		gdp_spend_pledged_law_approvers_effect = yes
+	}
+
+	requires_approve = { gdp_requires_assembly_approval_trigger = yes }
+
+	ai_approval = {
+		if = {
+			limit = { scope:proposer ?= root }
+			value = ai_law_approval_self_proposer_value
+		}
+		else = {
+			value = ai_law_approval_execution_2_value
+			add = ai_law_approval_republic_base_value
+		}
+	}
+
+	ai_will_do = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					ai_has_warlike_personality = yes
+					has_trait = just
+				}
+			}
+			add = 1
+		}
+		# Grace period
+		multiply = ai_law_grace_period_value
+	}
+}

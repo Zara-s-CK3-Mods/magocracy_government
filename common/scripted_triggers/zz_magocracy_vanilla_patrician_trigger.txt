@@ -1,0 +1,14 @@
+﻿## Vanilla override (common/scripted_triggers/gdp_republic_triggers.txt)
+# Unchanged except that a Mage's Commune holder also counts as a patrician.
+
+# Is the scope character a patrician?
+gdp_is_patrician_trigger = {
+	government_has_flag = government_is_republic
+	can_have_trade_posts = yes
+	domicile ?= {
+		OR = {
+			is_domicile_type = merchant_company
+			is_domicile_type = mages_commune # SOTHM Magocracy
+		}
+	}
+}

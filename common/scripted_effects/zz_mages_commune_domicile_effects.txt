@@ -1,0 +1,531 @@
+﻿# Mage's Commune copies of the raid building-destruction effects (domicile_effects.txt), and merchant company versions.
+
+
+mages_commune_destroy_or_downgrade_estate_building_2_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_02 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_02
+	}
+	else = { remove_domicile_building_no_refund = mages_commune_$BUILDING$_01 }
+}
+
+mages_commune_destroy_or_downgrade_estate_building_3_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_03 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_02 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_02
+	}
+	else = { remove_domicile_building_no_refund = mages_commune_$BUILDING$_01 }
+}
+
+mages_commune_destroy_or_downgrade_estate_building_4_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_04 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_03 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_02 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_02
+	}
+	else = { remove_domicile_building_no_refund = mages_commune_$BUILDING$_01 }
+}
+
+mages_commune_destroy_or_downgrade_estate_building_5_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_05 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_05
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_04 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_03 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_02 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_02
+	}
+	else = { remove_domicile_building_no_refund = mages_commune_$BUILDING$_01 }
+}
+
+mages_commune_destroy_or_downgrade_estate_building_6_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_06 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_06
+	}
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_05 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_05
+	}
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_04 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_03 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_02 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_02
+	}
+	else = { remove_domicile_building_no_refund = mages_commune_$BUILDING$_01 }
+}
+
+mages_commune_destroy_or_downgrade_estate_building_2_4_replacement_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_04 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+	else = {
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+}
+
+mages_commune_destroy_or_downgrade_estate_building_2_6_replacement_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_06 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_06
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_05 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_05
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_04 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+	else = {
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_03
+	}
+}
+
+mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = {
+	if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_06 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_06
+	}
+	else_if = {
+		limit = { has_domicile_building = mages_commune_$BUILDING$_05 }
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_05
+	}
+	else = {
+		lower_domicile_building_no_refund = mages_commune_$BUILDING$_04
+	}
+}
+
+mages_commune_destroy_random_estate_building_variable_effect = { # Domicile scope
+	save_scope_as = raid_domicile
+	if = {
+		limit = { has_variable = destroyed_building_variable }
+		remove_variable = destroyed_building_variable
+	}
+	random_list = { # Which building?
+				10 = { # barracks : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_barracks_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 0
+				months = 1
+			}
+		}
+				10 = { # watchtower : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_watchtower_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 1
+				months = 1
+			}
+		}
+				10 = { # guardhouse : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_guardhouse_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 2
+				months = 1
+			}
+		}
+				10 = { # garden : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_garden_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 3
+				months = 1
+			}
+		}
+				10 = { # stable : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_stable_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 4
+				months = 1
+			}
+		}
+				10 = { # workshop : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_workshop_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 5
+				months = 1
+			}
+		}
+				10 = { # storage : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_storage_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 6
+				months = 1
+			}
+		}
+				10 = { # market : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_market_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 7
+				months = 1
+			}
+		}
+				10 = { # grazing_land : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_grazing_land_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 8
+				months = 1
+			}
+		}
+				10 = { # grain_field : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_grain_field_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 9
+				months = 1
+			}
+		}
+				10 = { # vineyard : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_vineyard_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 11
+				months = 1
+			}
+		}
+				10 = { # olive : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_olive_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 12
+				months = 1
+			}
+		}
+				10 = { # temple : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_temple_small_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 13
+				months = 1
+			}
+		}
+				10 = { # silk : Normal
+			trigger = { has_domicile_building_or_higher = mages_commune_silk_01 }
+			set_variable = {
+				name = destroyed_building_variable
+				value = 26
+				months = 1
+			}
+		}
+		10 = { # production (merchant)
+			trigger = {
+				OR = {
+					has_domicile_building = mages_commune_merchant_company_building_production_02
+					has_domicile_building = mages_commune_merchant_company_building_production_03
+					has_domicile_building = mages_commune_merchant_company_building_production_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 200
+				months = 1
+			}
+		}
+		10 = { # trade (merchant)
+			trigger = {
+				OR = {
+					has_domicile_building = mages_commune_merchant_company_building_trade_02
+					has_domicile_building = mages_commune_merchant_company_building_trade_03
+					has_domicile_building = mages_commune_merchant_company_building_trade_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 201
+				months = 1
+			}
+		}
+		10 = { # warehouse (merchant)
+			trigger = {
+				OR = {
+					has_domicile_building = mages_commune_merchant_company_building_warehouse_02
+					has_domicile_building = mages_commune_merchant_company_building_warehouse_03
+					has_domicile_building = mages_commune_merchant_company_building_warehouse_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 202
+				months = 1
+			}
+		}
+		10 = { # civic (merchant)
+			trigger = {
+				OR = {
+					has_domicile_building = mages_commune_merchant_company_building_civic_02
+					has_domicile_building = mages_commune_merchant_company_building_civic_03
+					has_domicile_building = mages_commune_merchant_company_building_civic_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 203
+				months = 1
+			}
+		}
+	}
+}
+
+mages_commune_destroy_random_estate_building_effect = {
+	if = {
+		limit = { has_variable = destroyed_building_variable }
+		switch = {
+			trigger = var:destroyed_building_variable
+						0 = { # barracks : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = barracks }
+			}
+						1 = { # watchtower : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = watchtower }
+			}
+						2 = { # guardhouse : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_4_effect = { BUILDING = guardhouse }
+			}
+						3 = { # garden : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_garden_leisure_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = garden_leisure }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_garden_fruit_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = garden_fruit }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_3_effect = { BUILDING = garden }
+				}
+			}
+						4 = { # stable : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_stable_grand_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = stable_grand }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_stable_kennel_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = stable_kennel }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_stable_chariot_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = stable_chariot }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_3_effect = { BUILDING = stable }
+				}
+			}
+						5 = { # workshop : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_workshop_carpenter_03 }
+					mages_commune_destroy_or_downgrade_estate_building_2_6_replacement_effect = { BUILDING = workshop_carpenter }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_workshop_mason_03 }
+					mages_commune_destroy_or_downgrade_estate_building_2_6_replacement_effect = { BUILDING = workshop_mason }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_workshop_textile_03 }
+					mages_commune_destroy_or_downgrade_estate_building_2_6_replacement_effect = { BUILDING = workshop_textile }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_2_effect = { BUILDING = workshop }
+				}
+			}
+						6 = { # storage : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_storage_warehouse_03 }
+					mages_commune_destroy_or_downgrade_estate_building_2_4_replacement_effect = { BUILDING = storage_warehouse }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_storage_granary_03 }
+					mages_commune_destroy_or_downgrade_estate_building_2_4_replacement_effect = { BUILDING = storage_granary }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_2_effect = { BUILDING = storage }
+				}
+			}
+						7 = { # market : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = market }
+			}
+						8 = { # grazing_land : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_horse_pasture_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = horse_pasture }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_camel_pasture_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = camel_pasture }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_elephant_pasture_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = elephant_pasture }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = grazing_land }
+				}
+			}
+						9 = { # grain_field : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = grain_field }
+			}
+						11 = { # vineyard : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = vineyard }
+			}
+						12 = { # olive : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = olive }
+			}
+						13 = { # temple : Cheap
+				if = {
+					limit = { has_domicile_building_or_higher = mages_commune_temple_crypt_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = temple_crypt }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_temple_large_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = temple_large }
+				}
+				else_if = {
+					limit = { has_domicile_building_or_higher = mages_commune_temple_monastery_04 }
+					mages_commune_destroy_or_downgrade_estate_building_3_6_replacement_effect = { BUILDING = temple_monastery }
+				}
+				else = {
+					mages_commune_destroy_or_downgrade_estate_building_3_effect = { BUILDING = temple_small }
+				}
+			}
+						26 = { # silk : Cheap
+				mages_commune_destroy_or_downgrade_estate_building_6_effect = { BUILDING = silk }
+			}
+			200 = { raid_merchant_company_lower_building_effect = { BUILDING = mages_commune_merchant_company_building_production } }
+			201 = { raid_merchant_company_lower_building_effect = { BUILDING = mages_commune_merchant_company_building_trade } }
+			202 = { raid_merchant_company_lower_building_effect = { BUILDING = mages_commune_merchant_company_building_warehouse } }
+			203 = { raid_merchant_company_lower_building_effect = { BUILDING = mages_commune_merchant_company_building_civic } }
+		}
+		remove_variable = destroyed_building_variable
+	}
+}
+
+# Merchant companies: raids lower one of the four company buildings by a tier (tiers 2-4; tier 1 and the branching tiers are left alone)
+raid_merchant_company_lower_building_effect = {
+	if = {
+		limit = { has_domicile_building = $BUILDING$_04 }
+		lower_domicile_building_no_refund = $BUILDING$_04
+	}
+	else_if = {
+		limit = { has_domicile_building = $BUILDING$_03 }
+		lower_domicile_building_no_refund = $BUILDING$_03
+	}
+	else_if = {
+		limit = { has_domicile_building = $BUILDING$_02 }
+		lower_domicile_building_no_refund = $BUILDING$_02
+	}
+}
+
+raid_merchant_company_destroy_random_estate_building_variable_effect = { # Domicile scope
+	save_scope_as = raid_domicile
+	if = {
+		limit = { has_variable = destroyed_building_variable }
+		remove_variable = destroyed_building_variable
+	}
+	random_list = {
+		10 = { # production
+			trigger = {
+				OR = {
+					has_domicile_building = merchant_company_building_production_02
+					has_domicile_building = merchant_company_building_production_03
+					has_domicile_building = merchant_company_building_production_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 200
+				months = 1
+			}
+		}
+		10 = { # trade
+			trigger = {
+				OR = {
+					has_domicile_building = merchant_company_building_trade_02
+					has_domicile_building = merchant_company_building_trade_03
+					has_domicile_building = merchant_company_building_trade_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 201
+				months = 1
+			}
+		}
+		10 = { # warehouse
+			trigger = {
+				OR = {
+					has_domicile_building = merchant_company_building_warehouse_02
+					has_domicile_building = merchant_company_building_warehouse_03
+					has_domicile_building = merchant_company_building_warehouse_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 202
+				months = 1
+			}
+		}
+		10 = { # civic
+			trigger = {
+				OR = {
+					has_domicile_building = merchant_company_building_civic_02
+					has_domicile_building = merchant_company_building_civic_03
+					has_domicile_building = merchant_company_building_civic_04
+				}
+			}
+			set_variable = {
+				name = destroyed_building_variable
+				value = 203
+				months = 1
+			}
+		}
+	}
+}
+
+raid_merchant_company_destroy_random_estate_building_effect = {
+	if = {
+		limit = { has_variable = destroyed_building_variable }
+		switch = {
+			trigger = var:destroyed_building_variable
+			200 = { raid_merchant_company_lower_building_effect = { BUILDING = merchant_company_building_production } }
+			201 = { raid_merchant_company_lower_building_effect = { BUILDING = merchant_company_building_trade } }
+			202 = { raid_merchant_company_lower_building_effect = { BUILDING = merchant_company_building_warehouse } }
+			203 = { raid_merchant_company_lower_building_effect = { BUILDING = merchant_company_building_civic } }
+		}
+		remove_variable = destroyed_building_variable
+	}
+}
+

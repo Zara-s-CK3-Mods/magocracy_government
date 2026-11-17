@@ -1,0 +1,121 @@
+﻿l_english:
+ magocracy_appoint_patrician_governor_tt:0 "[recipient.GetShortUIName] joins the Magocracy, and their company becomes a Mage's Commune."
+ # Government
+ magocracy_government: "Magocracy"
+ magocracy_government_with_icon: "@government_type_administrative! $magocracy_government$"
+ magocracy_government_adjective: "Magocratic"
+ magocracy_government_realm: "Magocracy"
+ magocracy_government_desc: "\n$game_concept_magocracy_desc$\n\n#F A Magocracy is ruled by those who have mastered the higher mysteries. Its provinces are run by appointed governors, while the great mage houses grow rich through their trade posts, and choose the realm's head from among themselves.#!"
+ magocracy_government_house_attribute_flavor_name: "[powerful_family_attribute|E]"
+ magocracy_government_house_attribute_flavor_name_no_tooltip: "$game_concept_powerful_family_attribute$"
+ magocracy_government_opinion: "[magocracy|E] Ruler Opinion"
+ magocracy_government_vassal_opinion: "[magocracy|E] [vassal|E] Opinion"
+ magocracy_government_tax_contribution_add: "[magocracy|E] [vassal|E] [tax|E] [modifier_base_contribution|E]"
+ magocracy_government_tax_contribution_mult: "[magocracy|E] [vassal|E] [tax|E] [modifier_contribution|E]"
+ magocracy_government_levy_contribution_add: "[magocracy|E] [vassal|E] [levy|E] [modifier_base_contribution|E]"
+ magocracy_government_levy_contribution_mult: "[magocracy|E] [vassal|E] [levy|E] [modifier_contribution|E]"
+
+ game_concept_magocracy: "Magocracy"
+ game_concept_magocracy_government: "Magocracy Government"
+ game_concept_magocracy_governments: "Magocracy Governments"
+ game_concept_magocracies: "Magocracies"
+ game_concept_magocracy_desc: "A Magocracy combines the [administrative|E] bureaucracy of [governors|E], [noble_families|E] and title [men_at_arms|E] with the trade of a merchant republic: its noble houses live in a [mages_commune|E] and may establish [trade_posts|E]. The head of the realm is chosen by election among its governors and noble family heads, and magisters carry special weight."
+
+ # Domicile
+ domicile_mages_commune: "the [CHARACTER.GetHouse.GetNameNoTooltip] Mage's Commune"
+ mages_commune_domicile_type: "$game_concept_mages_commune$"
+ mages_commune_domicile_type_tooltip: "[mages_commune|E]"
+ mages_commune_domicile_title: "The [CHARACTER.GetHouse.GetBaseNameNoTooltip] $game_concept_mages_commune$"
+ mages_commune_domicile_type_possessive: "Mage's Commune's"
+ mages_commune_move_desc: "#T Move Mage's Commune#!\nMove your [mages_commune|E] to another [barony|E].\n@alert_icon! #alert_trial You will be unable to move it again for [EmptyScope.ScriptValue('estate_move_cooldown_value')|V0] days#!\n\n#S Cost:\n#![GetCostString( DOMICILE_TYPE.GetMoveCost( Character.Self ) )]\n\n#P Click to move your Mage's Commune#!"
+ game_concept_mages_commune: "Mage's Commune"
+ game_concept_mages_communes: "Mage's Communes"
+ game_concept_mages_commune_desc: "The seat of a [magocracy|E] noble house. A Mage's Commune combines the buildings of an [estate|E] with those of a [company|E], and has room for ten buildings around its main hall."
+
+ # House power
+ magocracy_mages_house_desc: "Magisters in the House"
+ magocracy_commune_in_capital_desc: "Mage's Commune in the Capital"
+
+ # Succession
+ magocracy_elective_succession_law: "Magocratic Election"
+ magocracy_elective_succession_law_effects: "The head of the Magocracy is elected by the Conclave from among the [realm|E]'s mages, and serves a term of office set by the [realm|E]'s term length [law|E]. When the term ends, a new election is held; the head may stand again."
+ magocracy_elective_succession_law_flavor: "#F The council of the great houses chooses who will lead the realm, and few would dare stand against a powerful magister.#!"
+ magocracy_appointment_succession_law: "Magocratic Appointment"
+ magocracy_appointment_succession_law_effects: "Governorships pass by appointment, as in other [administrative|E] realms. The great houses' heads and their close family stand for the title alongside the governor's own family, and the spouses of the realm's governors, head and councillors are passed over unless someone supports their candidacy."
+ magocracy_governor_spouse_desc: "Spouse of an Office Holder"
+ magocracy_elective_candidates: "Mages of the Realm"
+ magocracy_elective_candidates_tooltip: "In order to be a valid Candidate under Magocratic Election, a character must:\nBe an adult magister of the [realm|E], and one of the following:\n$EFFECT_LIST_BULLET$The [ruler|E] (to be re-elected)\n$EFFECT_LIST_BULLET$Close or extended family of the [ruler|E]\n$EFFECT_LIST_BULLET$A [councillor|E] of the [ruler|E]\n$EFFECT_LIST_BULLET$A [vassal|E] of the [realm|E]"
+ magocracy_elective_electors: "Ruler and Conclave"
+ magocracy_elective_electors_tooltip: "In order to be a valid [elector|E] under Magocratic Election, a character must fulfill one of the following conditions:\n$EFFECT_LIST_BULLET$Be the [ruler|E]\n$EFFECT_LIST_BULLET$Be a [direct_vassal|E] of the title who sits in the Conclave"
+ magocracy_elector_magister_desc: "Is a Magister"
+ magocracy_elector_mage_lords_desc: "Mage Lords House Power"
+ magocracy_candidate_magister_desc: "Candidate's Magical Power"
+ magocracy_elector_prefers_magister_desc: "Magisters Favour Magisters"
+
+ # Decision
+ found_magocracy_decision: "Found the Magocracy"
+ found_magocracy_decision_desc: "My mastery of the higher mysteries sets me above common rulers. I shall remake my realm as a Magocracy: ruled through governors, enriched by the merchant companies of its great houses, and led by the mightiest of mages."
+ found_magocracy_decision_tooltip: "Reform your realm into a [magocracy|E]."
+ found_magocracy_decision_confirm: "Let the mages rule!"
+ magocracy_vassals_convert_tt: "Your [administrative|E] [vassals|E] become part of the [magocracy|E]"
+
+ # Mage's Tower
+ building_type_zz_mages_tower_tower_01: "Mage's Tower"
+ building_type_zz_mages_tower_tower_01_desc: "A mighty tower, reaching far into the heavens, filled with acolytes and apprentices singing their sorcerous chants, generating arcane energies that crackle and burn."
+ building_zz_mages_tower_tower_01: "$building_type_zz_mages_tower_tower_01$"
+ building_zz_mages_tower_tower_01_desc: "$building_type_zz_mages_tower_tower_01_desc$"
+
+ # The Conclave of Magisters
+ magocracy_conclave_composition_magisters:0 "Conclave of Magisters"
+ magocracy_conclave_composition_magisters_effects:0 "Major Members:\n$EFFECT_LIST_BULLET$The head of the Magocracy\n$EFFECT_LIST_BULLET$Every adult magister among their [vassals|E]"
+ magocracy_conclave_composition_houses:0 "Conclave of Houses"
+ magocracy_conclave_composition_houses_effects:0 "Major Members:\n$EFFECT_LIST_BULLET$The head of the Magocracy\n$EFFECT_LIST_BULLET$The heads of the realm's noble families"
+ magocracy_conclave_composition_high:0 "High Conclave"
+ magocracy_conclave_composition_high_effects:0 "Major Members:\n$EFFECT_LIST_BULLET$The head of the Magocracy\n$EFFECT_LIST_BULLET$Adult magisters among their [vassals|E] holding a Duchy or greater\nMinor Members:\n$EFFECT_LIST_BULLET$Lesser magisters among their [vassals|E] and [courtiers|E]"
+
+ magocracy_conclave_composition_all_mages:0 "Conclave of All Magi"
+ magocracy_conclave_composition_all_mages_effects:0 "Major Members:\n$EFFECT_LIST_BULLET$The head of the Magocracy\n$EFFECT_LIST_BULLET$Every adult magister in the [realm|E]: [vassals|E], [courtiers|E] and [barons|E] alike\n\nEvery mage has an equal vote."
+
+ magocracy_conclave_authority_constitutional:0 "Constitutional Conclave"
+ magocracy_conclave_authority_constitutional_effects:0 "$EFFECT_LIST_BULLET$The Conclave votes on every change to the realm's [laws|E]"
+ magocracy_conclave_authority_legislative:0 "Legislative Conclave"
+ magocracy_conclave_authority_legislative_effects:0 "$EFFECT_LIST_BULLET$The Conclave must approve changes to the realm's [laws|E]"
+ magocracy_conclave_authority_ceremonial:0 "Ceremonial Conclave"
+ magocracy_conclave_authority_ceremonial_effects:0 "$EFFECT_LIST_BULLET$The Conclave advises, but the head of the Magocracy changes [laws|E] without its approval"
+
+ magocracy_conclave_voting_thresholds_simple_majority:0 "Simple Majority"
+ magocracy_conclave_voting_thresholds_simple_majority_effects:0 "$EFFECT_LIST_BULLET$A majority of the Conclave's votes is required to pass a [law|E]"
+ magocracy_conclave_voting_thresholds_supermajority:0 "Two-Thirds Majority"
+ magocracy_conclave_voting_thresholds_supermajority_effects:0 "$EFFECT_LIST_BULLET$Two-thirds of the Conclave's votes are required to pass a [law|E]"
+
+ # Magocracy family titles (title_type_magocracy_family); named like vanilla noble families
+ MAGOCRACY_FAMILY_TITLE_NAME:0 "[Select_CString( magocracy_family_founder.GetHouse.IsValid, magocracy_family_founder.GetHouse.GetBaseNameNoTooltip, magocracy_family_founder.GetNameNoTooltip )] [magocracy_family_founder.Custom('GetNobleFamilySuffix')]"
+
+ # Magocracy realm and ruler titles
+ count_magocracy_male:0 "Magister"
+ count_magocracy_female:0 "Magistra"
+ county_magocracy:0 "Enclave"
+ duke_magocracy_male:0 "High Magister"
+ duke_magocracy_female:0 "High Magistra"
+ duchy_magocracy:0 "Precinct"
+ king_magocracy_male:0 "Archmagister"
+ king_magocracy_female:0 "Archmagistra"
+ kingdom_magocracy:0 "Magocracy"
+ emperor_magocracy_male:0 "Magister Supreme"
+ emperor_magocracy_female:0 "Magistra Supreme"
+ empire_magocracy:0 "Grand Magocracy"
+ hegemon_magocracy_male:0 "Magister Exalted"
+ hegemon_magocracy_female:0 "Magistra Exalted"
+ hegemony_magocracy:0 "Exalted Magocracy"
+
+ # Magocracy types (after the Freehold Administration)
+ magocracy_type_pass_phrase:0 "[Law.GetNameNoTooltip]"
+ magocracy_type_confirmation_button_text:0 "Change Magocracy Administration"
+ magocracy_type_warmage:0 "Warmage Magocracy"
+ magocracy_type_warmage_effects:0 "\n#weak A realm held by battle-magisters, where sorcery is first of all a weapon of war and the legions march beneath the spells of their lords.#!"
+ magocracy_type_arcane:0 "Arcane Magocracy"
+ magocracy_type_arcane_effects:0 "\n#weak By the might of magic and the twisted mysteries of sorcerous ritual is the realm upheld. A true magocracy, where magical power is valued above all else.#!"
+ magocracy_type_merchant:0 "Merchant-Mage Magocracy"
+ magocracy_type_merchant_effects:0 "\n#weak A realm of merchant-magisters, whose spells fill coffers as readily as they fell armies, and whose wealth buys renown at home and abroad.#!"
+
+ magocracy_type_first_change_free:0 "First change of Magocracy type"

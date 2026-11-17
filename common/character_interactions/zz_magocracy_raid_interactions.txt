@@ -1,0 +1,734 @@
+﻿# Magocracy: raid estate interactions also allow Mage's Commune holders (see raid_estate_target_domicile_trigger).
+# Overrides of 06_ep3_scheme_interactions.txt / 06_ep3_interactions.txt - keep in sync.
+
+start_raid_estate_interaction = {
+	icon = icon_raid_estate
+	interface_priority = 90
+	category = interaction_category_hostile
+	send_name = START_SCHEME
+	scheme = raid_estate
+	ignores_pending_interaction_block = yes
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 60
+		duchy = 60
+		kingdom = 24
+		empire = 24
+		hegemony = 24
+	}
+
+	ai_targets = { ai_recipients = liege }
+	ai_targets = {
+		ai_recipients = peer_vassals
+		max = 20
+	}
+	ai_targets = {
+		ai_recipients = vassals
+		max = 20
+	}
+
+	filter_tags = { admin_house_head }
+
+	cooldown = { years = 5 }
+
+	highlighted_reason = start_raid_estate_interaction_HIGHLIGHTED
+
+	is_highlighted = { scope:actor.var:raid_estate_permission ?= scope:recipient.house }
+
+	redirect = {
+		scope:recipient = {
+			if = {
+				limit = {
+					is_house_head = no
+					exists = house.house_head
+				}
+				house.house_head = { save_scope_as = recipient }
+			}
+		}
+	}
+
+	is_available = {
+		raid_estate_raider_domicile_trigger = yes
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_available_adult = yes
+			shared_raid_estate_participant_valid_trigger = yes
+			trigger_if = {
+				limit = {
+					government_has_flag = government_is_celestial
+					exists = var:movement_power
+				}
+				var:movement_power >= extremely_high_movement_power_value
+			}
+			NOT = {
+				any_scheme = { is_hostile = yes }
+			}
+		}
+	}
+
+	is_shown = {
+		scope:recipient.house.house_head ?= {
+			raid_estate_target_domicile_trigger = { RAIDER = scope:actor }
+			is_independent_ruler = no
+			top_liege ?= scope:actor.top_liege
+			house != scope:actor.house
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_available_adult = yes
+			shared_raid_estate_participant_valid_trigger = yes
+			trigger_if = {
+				limit = {
+					government_has_flag = government_is_celestial
+					exists = var:movement_power
+				}
+				custom_tooltip = {
+					text = actor_not_extremely_high_movement_power
+					var:movement_power >= extremely_high_movement_power_value
+				}
+			}
+		}
+		scope:recipient.house.house_head ?= {
+			shared_raid_estate_participant_valid_trigger = yes
+		}
+		trigger_if = {
+			limit = { scope:actor = { has_variable = no_scheming_allowed_var } }
+			custom_tooltip = {
+				text = no_scheming_allowed_var_tt
+				scope:actor.var:no_scheming_allowed_var != scope:recipient
+			}
+		}
+	}
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:recipient.domicile ?= { is_domicile_type = japanese_manor }
+				}
+				desc = start_raid_estate_interaction_desc_japan
+			}
+			desc = start_raid_estate_interaction_desc
+		}
+	}
+
+	# Scheme Starter Packages
+	options_heading = schemes.t.agent_packages
+	send_options_exclusive = yes
+	## Balanced agents.
+	send_option = {
+		flag = agent_focus_balance
+		current_description = start_raid_estate_interaction.tt.agent_focus_balance
+	}
+	## Focused on Success Chance.
+	send_option = {
+		flag = agent_focus_success
+		current_description = start_raid_estate_interaction.tt.agent_focus_success
+	}
+	## Focused on Speed.
+	send_option = {
+		flag = agent_focus_speed
+		current_description = start_raid_estate_interaction.tt.agent_focus_speed
+	}
+	## Focused on Secrecy.
+	send_option = {
+		flag = agent_focus_secrecy
+		current_description = start_raid_estate_interaction.tt.agent_focus_secrecy
+	}
+	on_send = {
+		scope:actor = {
+			if = {
+				limit = {
+					OR = {
+						has_character_modifier = pam_granted_indulgences_modifier
+						has_character_modifier = pam_granted_indulgences_modifier_small
+					}
+				}
+				change_spiritual_fulfillment = major_spiritual_fulfillment_loss
+			}
+		}
+	}
+
+	on_accept = {
+		scope:recipient = {
+			custom_tooltip = raid_estate_kill_maim_imprison_house_members_tt
+			custom_tooltip = raid_estate_destroy_buildings_tt
+			if = {
+				limit = {
+					domicile ?= { is_domicile_type = japanese_manor }
+				}
+				custom_tooltip = raid_estate_house_modifier_tt_japan
+			}
+			else = { custom_tooltip = raid_estate_house_modifier_tt }
+			random_held_title = {
+				limit = { is_noble_family_title = yes }
+				save_scope_as = target_title
+			}
+		}
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = start_raid_estate_notification
+				left_icon = scope:recipient
+				right_icon = scope:target_title
+				# Success.
+				if = {
+					limit = { scope:agent_focus_success ?= yes }
+					begin_scheme_with_agents_effect = {
+						SCHEME_TYPE = raid_estate
+						TARGET_TYPE = target_character
+						TARGET_SCOPE = scope:recipient
+						# Success.
+						AGENT_1 = agent_scout
+						AGENT_2 = agent_scout
+						AGENT_3 = agent_muscle
+						# Speed.
+						AGENT_4 = agent_infiltrator
+						# Secrecy.
+						AGENT_5 = agent_lookout
+					}
+				}
+				# Speed.
+				else_if = {
+					limit = { scope:agent_focus_speed ?= yes }
+					begin_scheme_with_agents_effect = {
+						SCHEME_TYPE = raid_estate
+						TARGET_TYPE = target_character
+						TARGET_SCOPE = scope:recipient
+						# Speed.
+						AGENT_1 = agent_infiltrator
+						AGENT_2 = agent_infiltrator
+						AGENT_3 = agent_footpad
+						# Success.
+						AGENT_4 = agent_scout
+						# Secrecy.
+						AGENT_5 = agent_lookout
+					}
+				}
+				# Secrecy.
+				else_if = {
+					limit = { scope:agent_focus_secrecy ?= yes }
+					begin_scheme_with_agents_effect = {
+						SCHEME_TYPE = raid_estate
+						TARGET_TYPE = target_character
+						TARGET_SCOPE = scope:recipient
+						# Secrecy.
+						AGENT_1 = agent_lookout
+						AGENT_2 = agent_lookout
+						AGENT_3 = agent_alibi
+						# Success.
+						AGENT_4 = agent_scout
+						# Speed.
+						AGENT_5 = agent_infiltrator
+					}
+				}
+				# Balanced.
+				else = {
+					begin_scheme_with_agents_effect = {
+						SCHEME_TYPE = raid_estate
+						TARGET_TYPE = target_character
+						TARGET_SCOPE = scope:recipient
+						# Success.
+						AGENT_1 = agent_scout
+						AGENT_2 = agent_muscle
+						# Speed.
+						AGENT_3 = agent_infiltrator
+						AGENT_4 = agent_footpad
+						# Secrecy.
+						AGENT_5 = agent_lookout
+					}
+				}
+			}
+			# Scheme progress bonus from education
+			education_5_scheme_progress_effect = { SKILL = intrigue }
+			# Scheme bonuses from being the emperor/dominant family/powerful family
+			ep3_actor_scheme_modifier_effect = yes
+
+			custom_tooltip = raid_estate_gain_coin_tt
+			# Relations
+			if = {
+				limit = { has_relation_rival = scope:recipient }
+				custom_tooltip = raid_estate_nemesis_relation_tt
+			}
+			else = { custom_tooltip = raid_estate_rival_relation_tt }
+			# Catalysts
+			if = {
+				limit = {
+					NOT = { var:raid_estate_permission ?= scope:recipient.house }
+				}
+				show_as_tooltip = {
+					tgp_activate_catalyst_against_hegemon_effect = {
+						HEGEMON = scope:recipient.top_liege
+						CATALYST = catalyst_governor_raided_estate
+					}
+				}
+			}
+			# Only get stressed/SP penalties if you don't have the parameter
+			if = {
+				limit = {
+					NOT = { sp_hostile_schemes_except_murder_no_stress_or_fulfillment_trigger = yes }
+				}
+				stress_and_fulfillment_impact = {
+					content = medium_stress_impact_gain
+				}
+			}
+			if = {
+				limit = { has_relation_nemesis = scope:recipient }
+				stress_impact = { base = major_stress_impact_loss }
+			}
+			else_if = {
+				limit = { has_relation_rival = scope:recipient }
+				stress_impact = { base = medium_stress_impact_loss }
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	ai_will_do = {
+		base = -20
+		#Personality
+		modifier = {
+			has_trait = vengeful
+			add = 15
+		}
+		modifier = {
+			has_trait = forgiving
+			add = -15
+		}
+		modifier = {
+			has_trait = brave
+			add = 15
+		}
+		modifier = {
+			has_trait = craven
+			add = -15
+		}
+		# Relationships
+		modifier = {
+			add = -25
+			has_any_moderate_good_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+		}
+		modifier = {
+			add = -50
+			has_any_best_good_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+		}
+		modifier = {
+			add = 15
+			has_any_mild_bad_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+		}
+		modifier = {
+			add = 25
+			has_any_moderate_bad_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+		}
+		modifier = {
+			add = 50
+			has_any_worst_bad_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+		}
+		modifier = {
+			scope:recipient.house = scope:actor.top_liege.house
+			add = -25
+		}
+		opinion_modifier = {
+			who = scope:actor
+			opinion_target = scope:recipient
+			multiplier = -0.25
+		}
+		#Promised to abstain from sin
+		modifier = {
+			OR = {
+				has_character_modifier = pam_granted_indulgences_modifier
+				has_character_modifier = pam_granted_indulgences_modifier_small
+			}
+			factor = 0.1
+		}
+
+		# Avoid fellow movement members if possible (assuming they aren't rivals)
+		modifier = {
+			factor = {
+				value = 0.25
+				if = {
+					limit = {
+						is_in_pro_hegemon_or_hegemon_movement = yes
+					}
+					multiply = 0.5
+				}
+			}
+			is_in_same_movement_as = { TARGET = scope:recipient }
+			NOT = { has_relation_rival = scope:recipient }
+		}
+	}
+}
+
+request_raid_remit_interaction = {
+	icon = icon_request_raid_remit
+	category = interaction_category_hostile
+	filter_tags = { admin_liege }
+	interface_priority = 90
+
+	desc = request_raid_remit_interaction_desc
+	notification_text = request_raid_remit_interaction_notification
+	use_diplomatic_range = yes
+
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+
+	cooldown_against_recipient = { years = 5 }
+
+	is_available = {
+		raid_estate_raider_domicile_trigger = yes
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_house_head = yes
+			house ?= {
+				any_house_member = {
+					count <= 5
+					is_alive = yes
+				}
+			}
+		}
+		top_liege != this
+	}
+
+	is_shown = {
+		scope:secondary_recipient ?= {
+			raid_estate_target_domicile_trigger = { RAIDER = scope:actor }
+			house != scope:recipient.house
+			top_liege ?= scope:actor.top_liege
+			house != scope:actor.house
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_adult = yes
+			custom_tooltip = {
+				text = is_house_head_of_noble_family_tt
+				any_held_title = { is_noble_family_title = yes }
+				house.house_head ?= this
+			}
+			custom_tooltip = {
+				text = raid_estate_already_remit_tt
+				NOT = { exists = var:raid_estate_permission }
+			}
+			trigger_if = {
+				limit = {
+					government_has_flag = government_is_celestial
+					exists = var:movement_power
+				}
+				custom_tooltip = {
+					text = actor_not_extremely_high_movement_power
+					var:movement_power >= extremely_high_movement_power_value
+				}
+			}
+			NOT = { is_at_war_with = scope:recipient }
+		}
+		scope:recipient.house.house_head ?= {
+			custom_tooltip = {
+				text = is_house_head_of_noble_family_tt
+				any_held_title = { is_noble_family_title = yes }
+			}
+			custom_tooltip = {
+				text = raid_estate_estate_tt
+				raid_estate_raider_domicile_trigger = yes
+			}
+		}
+	}
+
+	populate_recipient_list = {
+		scope:actor.top_liege = {
+			every_noble_family = {
+				limit = {
+					NOR = {
+						holder = scope:actor
+						holder = scope:actor.top_liege
+					}
+				}
+				holder = { add_to_list = characters }
+			}
+		}
+	}
+
+	redirect = {
+		scope:recipient.house.house_head ?= { save_scope_as = secondary_recipient }
+		scope:actor.top_liege = { save_scope_as = recipient }
+	}
+
+	send_option = {
+		is_valid = { scope:actor.gold >= scope:actor.minor_gold_value }
+		flag = gold
+		localization = GENERIC_SPEND_GOLD
+	}
+	send_option = {
+		is_valid = {
+			scope:actor = { has_usable_hook = scope:recipient }
+			NOT = {
+				scope:recipient = { has_hook = scope:actor }
+			}
+		}
+		flag = hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	on_accept = {
+		if = {
+			limit = { scope:gold = yes }
+			show_as_tooltip = {
+				scope:actor = {
+					pay_short_term_gold = {
+						target = scope:recipient
+						gold = scope:actor.minor_gold_value
+					}
+				}
+			}
+		}
+		scope:recipient = { custom_tooltip = request_raid_remit_interaction_effect_tt }
+		custom_tooltip = request_raid_remit_interaction_duration_tt
+		hidden_effect = {
+			scope:actor = { trigger_event = ep3_interactions_events.0421 }
+		}
+		scope:actor = {
+			tgp_activate_catalyst_against_hegemon_effect = {
+				HEGEMON = scope:recipient
+				CATALYST = catalyst_hegemon_influenced_by_interaction
+			}
+		}
+	}
+
+	on_decline = {
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = request_raid_remit_effect_toast
+				left_icon = scope:recipient
+				right_icon = scope:actor
+				scope:recipient = {
+					send_interface_toast = {
+						type = event_toast_effect_bad
+						title = request_raid_remit_effect_toast
+						left_icon = scope:recipient
+						right_icon = scope:actor
+						if = {
+							limit = { scope:actor = { is_ai = yes } }
+							reverse_add_opinion = {
+								modifier = angry_opinion
+								opinion = -20
+								target = scope:actor
+							}
+						}
+						if = {
+							limit = { is_ai = yes }
+							add_opinion = {
+								modifier = respect_opinion
+								opinion = -10
+								target = scope:actor
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	cost = {
+		prestige = {
+			if = {
+				limit = {
+					scope:actor = { NOT = { government_has_flag = government_has_influence } }
+				}
+				add = scope:actor.massive_influence_value
+				# Being a Powerful or Dominant Family reduces the cost significantly
+				scope:actor.house = {
+					if = {
+						limit = { is_dominant_family = yes }
+						add = {
+							value = massive_influence_value
+							multiply = -0.75
+							desc = is_dominant_family_desc
+						}
+					}
+					else_if = {
+						limit = { is_powerful_family = yes }
+						add = {
+							value = massive_influence_value
+							multiply = -0.5
+							desc = is_powerful_family_desc
+						}
+					}
+				}
+			}
+		}
+		influence = {
+			if = {
+				limit = {
+					scope:actor = { government_has_flag = government_has_influence }
+				}
+				add = scope:actor.massive_influence_value
+				# Being a Powerful or Dominant Family reduces the cost significantly
+				scope:actor.house = {
+					if = {
+						limit = { is_dominant_family = yes }
+						add = {
+							value = massive_influence_value
+							multiply = -0.75
+							desc = is_dominant_family_desc
+						}
+					}
+					else_if = {
+						limit = { is_powerful_family = yes }
+						add = {
+							value = massive_influence_value
+							multiply = -0.5
+							desc = is_powerful_family_desc
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_targets = {
+		ai_recipients = peer_vassals
+		ai_recipients = scripted_relations
+		max = 10
+	}
+
+	ai_accept = {
+		base = -30
+		modifier = {
+			scope:hook = yes
+			add = 40
+			desc = SCHEME_WEAK_HOOK_USED
+		}
+		modifier = {
+			scope:gold = yes
+			add = 25
+			desc = SCHEME_WITH_GIFT_SIGNIFICANT
+		}
+		modifier = { # Target house is powerful
+			add = -10
+			desc = MY_HOUSE_IS_POWERFUL
+			scope:secondary_recipient.house ?= { is_powerful_family = yes }
+		}
+		modifier = { # Target house is dominant
+			add = -25
+			desc = MY_HOUSE_IS_DOMINANT
+			scope:secondary_recipient.house ?= { is_dominant_family = yes }
+		}
+		modifier = {
+			scope:actor.house = { is_powerful_family = yes }
+			add = 10
+			desc = YOUR_FAMILY_IS_POWERFUL
+		}
+		modifier = {
+			scope:actor.house = { is_dominant_family = yes }
+			add = 25
+			desc = YOUR_FAMILY_IS_DOMINANT
+		}
+		modifier = {
+			scope:recipient.primary_spouse ?= { house ?= scope:secondary_recipient.house }
+			add = -10
+			desc = MY_SPOUSES_HOUSE
+		}
+		modifier = {
+			any_child = { house = scope:secondary_recipient.house }
+			add = -10
+			desc = MY_CHILDS_HOUSE
+		}
+		modifier = {
+			is_close_family_of = scope:secondary_recipient
+			add = -10
+			desc = TARGET_IS_MY_CLOSE_FAMILY
+		}
+		opinion_modifier = {
+			opinion_target = scope:actor
+			multiplier = 0.5
+		}
+		opinion_modifier = {
+			opinion_target = scope:secondary_recipient
+			multiplier = -0.5
+		}
+		modifier = {
+			has_relation_rival = scope:secondary_recipient
+			add = 10
+			desc = THEY_ARE_MY_RIVAL
+		}
+		modifier = {
+			add = -10
+			desc = THEY_ARE_MY_FRIEND
+			scope:secondary_recipient = { has_relation_friend = scope:recipient }
+		}
+		modifier = { # You're my friend :)
+			add = 10
+			desc = youre_my_friend_tt
+			has_relation_friend = scope:actor
+		}
+		modifier = { # You're my rival >:(
+			add = -10
+			desc = ai_opinion.reason.relation.rival
+			has_relation_rival = scope:actor
+		}
+		modifier = { # You're my guardian
+			add = 10
+			desc = youre_my_guardian_tt
+			has_relation_guardian = scope:actor
+		}
+		ai_value_modifier = {
+			ai_boldness = -0.2
+			ai_honor = -0.2
+		}
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 120
+		kingdom = 60
+		empire = 60
+		hegemony = 0
+	}
+
+	ai_will_do = {
+		base = -25
+		opinion_modifier = { # Opinion
+			opinion_target = scope:recipient
+			multiplier = -0.5
+		}
+		modifier = { # My rival
+			add = 25
+			scope:actor = { has_relation_rival = scope:recipient }
+		}
+		modifier = { # My friend
+			add = -25
+			scope:actor = { has_relation_friend = scope:recipient }
+		}
+		modifier = {
+			scope:actor = {
+				house_has_feud_relation_with_trigger = { TARGET = scope:recipient }
+			}
+			add = 15
+		}
+
+		# Avoid fellow movement members if possible
+		modifier = {
+			is_in_same_movement_as = { TARGET = scope:recipient }
+			add = {
+				value = -10
+				if = {
+					limit = {
+						is_in_pro_hegemon_or_hegemon_movement = yes
+					}
+					multiply = 1.5
+				}
+			}
+		}
+	}
+}

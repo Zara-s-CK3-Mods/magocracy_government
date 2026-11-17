@@ -1,0 +1,111 @@
+﻿# Republican election for the Magocracy: the head and the Conclave (assembly members among their direct vassals) vote.
+# Any adult mage of the realm can be elected. The head always votes, so a realm with an empty Conclave still has an elector.
+magocracy_elective = {
+	elector_vote_strength = {
+		base = 1
+
+		# Magisters carry more weight in the council
+		modifier = {
+			add = 1
+			has_trait = zz_magister
+			desc = magocracy_elector_magister_desc
+		}
+		modifier = {
+			add = 1
+			this = top_liege
+			house ?= { has_house_aspiration_parameter = zz_mage_lords_3 }
+			desc = magocracy_elector_mage_lords_desc
+		}
+	}
+
+	electors = {
+		character_sets = {
+			magocracy_electors_holder = {
+				type = holder
+			}
+			magocracy_electors_assembly_members = { # The Conclave votes; its composition law decides who sits in it
+				type = holder_direct_vassals
+				limit = {
+					is_assembly_member = yes
+				}
+			}
+		}
+	}
+
+	candidates = {
+		character_sets = {
+			magocracy_candidates_holder = { # Re-election
+				type = holder
+			}
+			magocracy_candidates_close_family = {
+				type = holder_close_or_extended_family
+			}
+			magocracy_candidates_council = {
+				type = holder_council_members
+			}
+			magocracy_candidates_direct_vassals = {
+				type = holder_direct_vassals
+			}
+			magocracy_candidates_realm_vassals = { # Indirect vassals too
+				type = title_dejure_vassals
+			}
+		}
+
+		# Any mage of the realm may stand, landed or not
+		limit = {
+			has_trait = zz_magister
+			OR = {
+				this = scope:holder
+				top_liege = scope:holder.top_liege
+			}
+			is_adult = yes
+			is_imprisoned = no
+			is_incapable = no
+			trigger_if = {
+				limit = {
+					top_liege = {
+						OR = {
+							has_realm_law = male_only_law
+							has_realm_law = male_preference_law
+						}
+					}
+				}
+				is_female = no
+			}
+			trigger_if = {
+				limit = {
+					top_liege = {
+						OR = {
+							has_realm_law = female_only_law
+							has_realm_law = female_preference_law
+						}
+					}
+				}
+				is_female = yes
+			}
+		}
+	}
+
+	candidate_score = {
+		base = 0
+
+		elector_voting_pattern_republican_elective_modifier = yes
+		elector_voting_pattern_circumstances_republican_elective_modifier = yes
+		elector_voting_pattern_circumstances_misc_elective_modifier = yes
+
+		# Magisters favour the most powerful mage
+		modifier = {
+			add = scope:candidate.magocracy_candidate_magister_score
+			exists = scope:candidate
+			scope:candidate = { has_trait = zz_magister }
+			desc = magocracy_candidate_magister_desc
+		}
+		modifier = {
+			add = 25
+			exists = scope:candidate
+			has_trait = zz_magister
+			scope:candidate = { has_trait = zz_magister }
+			desc = magocracy_elector_prefers_magister_desc
+		}
+	}
+}
